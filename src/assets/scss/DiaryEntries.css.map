@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "ACAA,2CAA2C;ADE3C,AAAA,eAAe,CAAC;EACZ;;;;MAIE;EACF,QAAQ,EAAE,QAAQ;EAClB,GAAG,EAAE,CAAC;EACN,MAAM,EAAE,KAAK;EACb,gBAAgB,ECVH,OAAO;CDWvB",
+    "sources": [
+        "DiaryEntries.scss",
+        "variables.scss"
+    ],
+    "names": [],
+    "file": "DiaryEntries.css"
+}

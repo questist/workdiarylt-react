@@ -1,0 +1,9 @@
+.timer {
+    align-self: center;
+    > div:first-of-type {
+        margin-right: 25px;
+    }
+    > div {
+        display: inline-block;
+    }
+}

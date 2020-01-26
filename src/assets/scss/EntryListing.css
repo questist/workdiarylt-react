@@ -1,0 +1,39 @@
+/* Global Variables for colors fonts etc */
+.entry-listing {
+  border-bottom: #fff;
+  height: 40px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  cursor: pointer;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border-bottom: 2px solid white;
+}
+
+.entry-listing h3 {
+  margin: 0;
+  margin-left: 20px;
+}
+
+.entry-unselected {
+  -webkit-transition: .2s linear;
+  transition: .2s linear;
+  background-color: #ff0000;
+}
+
+.entry-unselected:hover {
+  background-color: #d1d2e9;
+}
+
+.entry-selected {
+  background-color: #595daf;
+}
+
+.entry-pomodoro {
+  background-color: lightgray;
+}
+/*# sourceMappingURL=EntryListing.css.map */

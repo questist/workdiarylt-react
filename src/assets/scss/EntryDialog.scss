@@ -1,0 +1,30 @@
+@import './variables';
+
+.entry-dialog {
+    /*
+    width: 50%;
+    
+    display: inline-block;
+    left: 0;*/
+    position: relative;
+    height: fit-content;
+    text-align: left;
+    background-color: $dark-foreground-color;
+    box-sizing: border-box;
+    > div {
+        background-color: $light-foreground-color;
+        border: 3px solid white;
+        margin: 10px;
+        padding: 10px;
+        .button-row {
+            display: flex;
+        }
+
+        .data-section {
+            border: 1px solid black;
+            border-radius: 6px;
+            padding: 15px;
+
+        }
+    }
+}

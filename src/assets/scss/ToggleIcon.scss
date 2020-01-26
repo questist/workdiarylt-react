@@ -1,0 +1,14 @@
+@import './variables';
+
+.toggle-icon {
+    background-color: $dark-bg-color;
+    font-size: 20px;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    right: 5px;
+    top: 2px;
+    padding: 0 1px 0 0;
+    content: url(../images/toggle.png)
+}

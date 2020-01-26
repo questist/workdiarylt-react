@@ -1,0 +1,32 @@
+@import './variables';
+
+.entry-listing {
+    border-bottom: #fff;
+    height: 40px;
+    align-items: center;
+    display: flex;
+    cursor: pointer;
+    box-sizing: border-box;
+    border-bottom: 2px solid white;
+    h3 {
+        margin: 0;
+        margin-left: 20px;
+    }
+}
+
+.entry-unselected {
+    transition: .2s linear;
+    background-color: $light-bg-color;
+}
+
+.entry-unselected:hover {
+    background-color: $light-foreground-color;
+}
+
+.entry-selected {
+    background-color: $dark-foreground-color;
+}
+
+.entry-pomodoro {
+    background-color: lightgray;
+}

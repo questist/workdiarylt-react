@@ -1,0 +1,34 @@
+@import './variables';
+
+h4 {
+    margin: 0 0 10px 0;
+    img {
+        border: 1px solid black;
+        
+    }
+    svg {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+    }
+    .star {
+        /*fill: $light-bg-color;*/
+        transition: .2s ease-in-out;
+        cursor: pointer;
+    } 
+    .star:hover {
+        fill: $dark-bg-color;
+    }
+
+    .star-hover-selected {
+        fill: lightgrey;
+    }
+
+    .star-selected {
+        fill: $dark-bg-color;
+    }
+
+    .star-unselected {
+        fill: $light-bg-color;
+    }
+}
