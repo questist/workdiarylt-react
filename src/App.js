@@ -11,6 +11,7 @@ import workimgselected from './assets/images/menu-work-selected.png'
 import diaryimgunselected from './assets/images/menu-diary-unselected.png'
 //import alarm from './assets/audio/alarm.mp3'
 import {StatusEnum} from './components/GlobalFunctions'
+import Controls from './components/Controls'
 
 function App() {
   /*
@@ -29,7 +30,7 @@ function App() {
   today[today.length-1].selected = true;
   */
 
-  let fetchToday = [{
+  let initialEntry = {
     index: 0,
     title: "Logging my activities",
     id: "0_welcome",
@@ -41,10 +42,15 @@ function App() {
     isPomodoro: false,
     status: StatusEnum.APPSTARTED,
     duration: 0,
-  }]
-  const [today, setToday] = useState(fetchToday)
+  }
+
+  const [today, setEntries] = useState([initialEntry])
   const [isStarted,setStart] = useState(false)
 
+  const addEntry = (entry) => {
+    setEntries(today.push(entry))
+  };
+  
   //set currently selected entry
   const [selectedEntry,setSelectedEntry] = useState(today[today.length-1]);
   const [startingPomodoro,setStartingPomodoro] = useState(null)
@@ -87,45 +93,54 @@ function App() {
     newlySelectedEntry.selectedClass = "entry-selected"
     
   }
-
+  
   //handle the onClickHander of the NEXT ENTRY BUTTON by adding the next entry after it
   function onNewEntry(e) {
     //delete pomodoros
-    if(today[0].isPomodoro) {
-      setStartingPomodoro(null)
-      fetchToday = today.filter(function(val,index) {
-        return !(val.isPomodoro && val.status !== StatusEnum.COMPLETED)
-      })
-      setToday(fetchToday)
-    }
-    else {
-      fetchToday = today
+    // if(today[0].isPomodoro) {
+    //   setStartingPomodoro(null)
+    //   fetchToday = today.filter(function(val,index) {
+    //     return !(val.isPomodoro && val.status !== StatusEnum.COMPLETED)
+    //   })
+    //   setToday(fetchToday)
+    // }
+    // else {
+    //   fetchToday = today
+    // }
+
+    // let l = fetchToday.length
+    // let topEntry = fetchToday[0]
+    // if(topEntry.status === StatusEnum.RUNNING) {
+    //   topEntry.end = new Date()
+    // }
+    // else {
+    //   console.log("Warning: The last Entry in Todays Entries end time was already set, while creating a new entry")
+    // }
+    // if(selectedEntry.isPomodoro === false) {
+    //   selectedEntry.selectedClass = "entry-unselected"
+    // }
+    const extra = {
+      title: (selectedEntry.isPomodoro === false)?selectedEntry.title:"Logging my Activities",
+      status: StatusEnum.RUNNING
     }
 
-    let l = fetchToday.length
-    let topEntry = fetchToday[0]
-    if(topEntry.status === StatusEnum.RUNNING) {
-      topEntry.end = new Date()
-    }
-    else {
-      console.log("Warning: The last Entry in Todays Entries end time was already set, while creating a new entry")
-    }
-    if(selectedEntry.isPomodoro === false) {
-      selectedEntry.selectedClass = "entry-unselected"
-    }
-    fetchToday.unshift({
-      index: l,
-      title: (selectedEntry.isPomodoro === false)?selectedEntry.title:"Logging my Activities",
-      id: l + "_" + selectedEntry.title.slice(0,5),
-      start: new Date(),
-      end: null,
-      selectedClass: "entry-selected",
-      notes: "",
-      rating: 0,
-      isPomodoro: false,
-      status: StatusEnum.RUNNING,
-      duration: 0,
-    })
+    const newobj = Object.assign({}, initialEntry, extra);
+
+    addEntry(newobj)
+    
+    // fetchToday.unshift({
+    //   index: l,
+    //   title: (selectedEntry.isPomodoro === false)?selectedEntry.title:"Logging my Activities",
+    //   id: l + "_" + selectedEntry.title.slice(0,5),
+    //   start: new Date(),
+    //   end: null,
+    //   selectedClass: "entry-selected",
+    //   notes: "",
+    //   rating: 0,
+    //   isPomodoro: false,
+    //   status: StatusEnum.RUNNING,
+    //   duration: 0,
+    // })
 
     document.getElementsByClassName("entry-dialog")[0].style.top = "0px"
     
@@ -134,12 +149,12 @@ function App() {
     }
     //cssSelectEntry(today[0])
     //might reset if the top one is a pomodoro but thats ok
-    if(fetchToday[1].status !== StatusEnum.APPSTARTED) {
-      fetchToday[1].status = StatusEnum.COMPLETED
-    }
+    // if(fetchToday[1].status !== StatusEnum.APPSTARTED) {
+    //   fetchToday[1].status = StatusEnum.COMPLETED
+    // }
     
-    cssSetRatings(fetchToday[0])
-    setSelectedEntry(fetchToday[0])
+    // cssSetRatings(fetchToday[0])
+    // setSelectedEntry(fetchToday[0])
     if(isStarted == false) {
       setStart(true)
     }
@@ -350,7 +365,7 @@ function App() {
       setStartingPomodoro(null)
       setStart(false)
     }
-    
+   
   }
   return (
     <div className="App">
@@ -361,25 +376,14 @@ function App() {
         <img src={diaryimgunselected} />
       </div>
     </div>
-    <div className="work-toolbar">
-      <div>
-        <div>
-          <Button text="Pomodoro"
-            onClickHandler={onClickPomodoro} 
-            style={{marginTop: '10px',marginBottom: '10px',width: '102px'}}
-          />
-          <Button 
-            text={(isStarted)?"Pause":"Start"}
-            onClickHandler={onClickStart}
-            style={{marginTop: '10px',marginBottom: '10px',width: '102px',justifyContent: 'center'}} 
-          />
-        </div>
-        <Timer entry={selectedEntry} isRunning={isStarted} checkEntry={checkEntry}/>
-      </div>
-      <div>
-        <h5>{today.length} Entries</h5>
-      </div>
-    </div>
+    <Controls
+      today={today}
+      selectedEntry={selectedEntry}
+      onClickPomodoro={onClickPomodoro}
+      onClickStart={onClickStart}
+      isStarted={isStarted}
+      checkEntry={checkEntry}
+    />
     <div className="today-select">
       <EntryDialog 
         entry={selectedEntry}

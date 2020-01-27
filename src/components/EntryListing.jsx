@@ -24,6 +24,7 @@ export default function EntryListing({entry,onClickEntry,options}) {
     useEffect(() => {
         entry.setTitleText()
     },[entry])
+    if(notRunning ) return null
     return (
         <div 
             className={"entry-listing " + 
@@ -35,6 +36,9 @@ export default function EntryListing({entry,onClickEntry,options}) {
                 {text}
         
             </h3>
+            {true &&
+                <p>true</p>
+            }
         </div>
     )
 }
