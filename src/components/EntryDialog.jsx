@@ -59,8 +59,8 @@ export default function EntryDialog({entry,onNewEntry,isEditPomodoro,setPomodoro
     
     else {
         let titleLine = ""
-        if(!entry.isPomodoro || entry.status == StatusEnum.COMPLETED) {
-             let forString = (entry.status == StatusEnum.COMPLETED)?(" for " + entry.duration + " minutes"):""
+        if(!entry.isPomodoro || entry.status === StatusEnum.COMPLETED) {
+             let forString = (entry.status === StatusEnum.COMPLETED)?(" for " + entry.duration + " minutes"):""
              titleLine = "I felt like " + entry.title + " today at " + entry.start.toLocaleTimeString() + forString
         }
         else {

@@ -17,7 +17,7 @@ function App() {
   /*
   //test variables for today
   const values = ["Code","Break","Code","Lunch","Break"];
-  let today = values.map((val,index) => {
+  let entries = values.map((val,index) => {
     return {
         index: index,
         title: val,
@@ -27,7 +27,7 @@ function App() {
     }
   })
 
-  today[today.length-1].selected = true;
+  entries[entries.length-1].selected = true;
   */
 
   let initialEntry = {
@@ -44,15 +44,15 @@ function App() {
     duration: 0,
   }
 
-  const [today, setEntries] = useState([initialEntry])
+  const [entries, setEntries] = useState([initialEntry])
   const [isStarted,setStart] = useState(false)
 
   const addEntry = (entry) => {
-    setEntries(today.push(entry))
+    setEntries(entries.push(entry))
   };
   
   //set currently selected entry
-  const [selectedEntry,setSelectedEntry] = useState(today[today.length-1]);
+  const [selectedEntry,setSelectedEntry] = useState(entries[entries.length-1]);
   const [startingPomodoro,setStartingPomodoro] = useState(null)
   const [editPomodoro,setEditPomodoro] = useState(false)
   //this is defined here to unselect the background color of the EntryListing component, try to move it in later
