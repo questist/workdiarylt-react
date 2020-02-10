@@ -5,6 +5,7 @@ import DiaryEntries from './components/DiaryEntries'
 import Timer from './components/Timer'
 import EntryDialog from './components/EntryDialog'
 import Button from './components/Button'
+import PomodoroDialog from './components/PomodoroDialog'
 import './assets/scss/app.css'
 import ltlogo from './assets/images/logo.png'
 import workimgselected from './assets/images/menu-work-selected.png'
@@ -49,6 +50,7 @@ function App() {
 
   const addEntry = (entry) => {
     entries.unshift(entry)
+    console.log("length: " + entries.length)
     setEntries(entries)
   };
   
@@ -121,6 +123,7 @@ function App() {
     //   selectedEntry.selectedClass = "entry-unselected"
     // }
     const extra = {
+      id: entries.length + selectedEntry.title.slice(0,5),
       title: (selectedEntry.isPomodoro === false)?selectedEntry.title:"Logging my Activities",
       status: StatusEnum.RUNNING
     }
@@ -128,6 +131,7 @@ function App() {
     const newobj = Object.assign({}, initialEntry, extra);
 
     addEntry(newobj)
+    console.log("Here")
     
     // fetchToday.unshift({
     //   index: l,
@@ -142,8 +146,6 @@ function App() {
     //   status: StatusEnum.RUNNING,
     //   duration: 0,
     // })
-
-    document.getElementsByClassName("entry-dialog")[0].style.top = "0px"
     
     if(selectedEntry.isPomodoro === false) {
       cssUnselectEntry(selectedEntry)
@@ -212,6 +214,9 @@ function App() {
     setEditPomodoro(true)
   }
   
+  function cancelPomodoro(e) {
+    setEditPomodoro(false)
+  }
   function setPomodoro() {
     let title = document.getElementById("pomodoro-title").value
     let duration = document.getElementById("pomodoro-duration").value
@@ -312,12 +317,22 @@ function App() {
     }
   }
   
+  /*
+  click handler Functionality for the START BUTTON
+  Will Pause the app from running stoping the timer or
+  start a Pomodoro set running otherwise
+  if the first entry is the first entry of the day it will start timing that one
+  or add a new one and start it timing
+  */
   function onClickStart(e) {
+    
     if(isStarted) {
       setStart(false)
       stopRunning()
+      
     }
-    else if(entries[0].status !== StatusEnum.COMPLETED) {
+    else {
+    
       setStart(true)
       //if the last entry is a pomodoro then start at the first pomodoro in the sequence
       //remember the pomodoros are deleted on day save and on regular new entries which is why this works
@@ -326,8 +341,14 @@ function App() {
         if(starting.status == StatusEnum.PAUSED) starting.status = StatusEnum.RUNNING
         else iteratePomodoro(startingPomodoro)
       }
+      //otherwise if the app just started start timing the first item
+      else if(entries[0].status === StatusEnum.APPSTARTED) {
+        entries[0].status = StatusEnum.RUNNING
+      }
+      //otherwise add a new entry because the app was paused
       else {
-        onNewEntry()
+        console.log("here 2")
+        onNewEntry(1)
       }
     }
   }
@@ -386,12 +407,11 @@ function App() {
       checkEntry={checkEntry}
     />
     <div className="today-select">
-      <EntryDialog 
-        entry={selectedEntry}
-        isEditPomodoro={editPomodoro}
+      {editPomodoro ?
+      <PomodoroDialog 
         setPomodoro={setPomodoro}
-        onNewEntry={onNewEntry}
-      />
+        cancelPomodoro={cancelPomodoro}
+      />:<div></div>}
       <DiaryEntries entries={entries} onClickEntry={onClickEntry} />
     </div>
   

@@ -4,11 +4,11 @@ import '../assets/scss/EntryDialog.css'
 import EntryDialog from '../components/EntryDialog'
 import {StatusEnum} from '../components/GlobalFunctions'
 
-export default function EntryListing({entry,onClickEntry,options}) {
+export default function EntryListing({entry,onClickEntry}) {
     let startTime = ""
     const [isDialogOpen,setDialog] = useState(false)
     const [text,setText] = useState((entry.isPomodoro)?entry.start : entry.start.toLocaleTimeString() + " : " + entry.title)
-    
+    console.log("here 2")
     entry.setTitleText = function() {
         console.log(StatusEnum.NOTSTARTED + " is status")
         if(entry.status == StatusEnum.NOTSTARTED) {
@@ -25,9 +25,6 @@ export default function EntryListing({entry,onClickEntry,options}) {
         }
     }
     
-    entry.closeDialog = function() {
-        setDialog("")
-    }
     function onClickCloseDialog(e) {
         setDialog(isDialogOpen?false:true)
     }

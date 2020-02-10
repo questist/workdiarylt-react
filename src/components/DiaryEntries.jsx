@@ -7,12 +7,11 @@ export default function DiaryEntries({entries}) {
     const [selectedEntry,setSelectedEntry] = useState(entries[0])
     
     function onClickEntry(e,entry) {
-        selectedEntry.closeDialog()
         setSelectedEntry(entry)
     }
     //onclick rerenders this component so we had to add a effect to the state of the EntryListing
     
-    //console.log(entries[0].title)
+    console.log(entries.length)
 
     const entryList = entries.map((entry,index) => {
             let e = (<EntryListing 
