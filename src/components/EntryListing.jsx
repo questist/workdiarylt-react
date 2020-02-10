@@ -1,15 +1,12 @@
 import React,{useState, useEffect} from 'react'
 import '../assets/scss/EntryListing.css'
 import '../assets/scss/EntryDialog.css'
-import Button from './Button'
-import RatingField from './RatingField'
-import NotesField from './NotesField'
-import TitleField from './TitleField'
+import EntryDialog from '../components/EntryDialog'
 import {StatusEnum} from '../components/GlobalFunctions'
 
 export default function EntryListing({entry,onClickEntry,options}) {
     let startTime = ""
-    const [dialog,setDialog] = useState("")
+    const [isDialogOpen,setDialog] = useState(false)
     const [text,setText] = useState((entry.isPomodoro)?entry.start : entry.start.toLocaleTimeString() + " : " + entry.title)
     
     entry.setTitleText = function() {
@@ -27,35 +24,25 @@ export default function EntryListing({entry,onClickEntry,options}) {
             throw new Error("EntryListing.setTitleText: Status should not found")
         }
     }
-    function onClickCloseDialog(e) {
+    
+    entry.closeDialog = function() {
         setDialog("")
+    }
+    function onClickCloseDialog(e) {
+        setDialog(isDialogOpen?false:true)
     }
     function entryOnClickEntry(e) {
         let titleLine = ""
         if(!entry.isPomodoro || entry.status == StatusEnum.COMPLETED) {
              let forString = (entry.status == StatusEnum.COMPLETED)?(" for " + entry.duration + " minutes"):""
-             titleLine = "I felt like " + entry.title + " today at " + entry.start.toLocaleTimeString() + forString
+             titleLine = "I felt like " + entry.title + " entries at " + entry.start.toLocaleTimeString() + forString
         }
         else {
             titleLine = "I will be " + entry.title + " for " + entry.duration + " minutes"
         }
         
-        setDialog( (
-            <div className="entry-dialog" onClick={onClickCloseDialog}>
-                <div>
-                    <h3>{titleLine}</h3>
-                    <div className="data-section">
-                        <TitleField entry={entry}/>
-                        <RatingField entry={entry} />
-                        <NotesField entry={entry}/>
-                    </div>
-                    <div className="button-row">
-                        <Button text="Edit"/>
-                        <Button text="Details"/>
-                    </div>
-                </div>
-            </div>
-        ))
+        setDialog(isDialogOpen?false:true)
+        onClickEntry(e,entry)
     }
     useEffect(() => {
         entry.setTitleText()
@@ -75,7 +62,7 @@ export default function EntryListing({entry,onClickEntry,options}) {
                 </h3>
                 
             </div>
-            {dialog}
+            {isDialogOpen && <EntryDialog entry={entry} />}
         </React.Fragment>
     )
 }

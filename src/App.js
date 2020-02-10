@@ -48,7 +48,8 @@ function App() {
   const [isStarted,setStart] = useState(false)
 
   const addEntry = (entry) => {
-    setEntries(entries.push(entry))
+    entries.unshift(entry)
+    setEntries(entries)
   };
   
   //set currently selected entry
@@ -185,7 +186,7 @@ function App() {
     //could use filter here
     //need to extract the entry with the matching id passed from the today array of entry objects
     try {
-      today.forEach((val,index) => {
+      entries.forEach((val,index) => {
         if(el.getAttribute('id') === val.id) { 
           entry = val
           throw new Error("id found")
@@ -220,17 +221,17 @@ function App() {
     console.log("here" )
     let shortBreakCount = 0
     let longBreakCount = 0
-    let entries = today.length
+    let entries = entries.length
     for(let i=0,n=0,s=0; i < number;) {
       console.log("i = " + i)
       if(n < 4) {
         n++
         i++
         
-        today.unshift({
-          index: today.length,
+        entries.unshift({
+          index: entries.length,
           title: (title == "")?"Pomodoro " + i:title,
-          id: today.length + "_" + title.slice(0,5),
+          id: entries.length + "_" + title.slice(0,5),
           start: "Pomodoro " + i,
           end: 0,
           selectedClass: "entry-unselected",
@@ -244,10 +245,10 @@ function App() {
       if(s < 3 && i != number) {
         s++
         shortBreakCount++
-        today.unshift({
-          index: today.length,
+        entries.unshift({
+          index: entries.length,
           title: "Taking a Break",
-          id: today.length + "_sb",
+          id: entries.length + "_sb",
           start: "Short Break " + shortBreakCount,
           end: null,
           selectedClass: "entry-unselected",
@@ -263,10 +264,10 @@ function App() {
         s = 0
         console.log("i="+i + "/number="+number)
         longBreakCount++
-        today.unshift({
-          index: today.length,
+        entries.unshift({
+          index: entries.length,
           title: "Taking a Break",
-          id: today.length + "_lb",
+          id: entries.length + "_lb",
           start: "Long Break " + longBreakCount,
           end: null,
           selectedClass: "entry-unselected",
@@ -278,8 +279,8 @@ function App() {
         })
       }
     }
-    setStartingPomodoro(today.length - entries - 1)
-    let lastPomodoro = today[0]
+    setStartingPomodoro(entries.length - entries - 1)
+    let lastPomodoro = entries[0]
     lastPomodoro.selectedClass = "entry-selected"
     
     document.getElementsByClassName("entry-dialog")[0].style.top = "0px"
@@ -297,12 +298,12 @@ function App() {
 
   function stopRunning() {
     if(startingPomodoro !== null) {
-      let start = today[startingPomodoro]
+      let start = entries[startingPomodoro]
       start.status = StatusEnum.PAUSED
       start.end = new Date()
     }
     else {
-      let start = today[0]
+      let start = entries[0]
       start.status = StatusEnum.COMPLETED
       start.end = new Date()
       let milliseconds = new Date(start.end - start.start)
@@ -316,12 +317,12 @@ function App() {
       setStart(false)
       stopRunning()
     }
-    else if(today[0].status !== StatusEnum.COMPLETED) {
+    else if(entries[0].status !== StatusEnum.COMPLETED) {
       setStart(true)
       //if the last entry is a pomodoro then start at the first pomodoro in the sequence
       //remember the pomodoros are deleted on day save and on regular new entries which is why this works
-      if(today[0].isPomodoro === true) {
-        let starting = today[startingPomodoro]
+      if(entries[0].isPomodoro === true) {
+        let starting = entries[startingPomodoro]
         if(starting.status == StatusEnum.PAUSED) starting.status = StatusEnum.RUNNING
         else iteratePomodoro(startingPomodoro)
       }
@@ -333,7 +334,7 @@ function App() {
 
   
   function iteratePomodoro(index) {
-    let start = today[index]
+    let start = entries[index]
     start.start = new Date()
     //start.setTitleText()
     cssUnselectEntry(selectedEntry)
@@ -348,20 +349,20 @@ function App() {
 
   function checkEntry() {
     if(isStarted === false || startingPomodoro === null) return
-    console.log(today[startingPomodoro].start)
+    console.log(entries[startingPomodoro].start)
    
-    let elapsedTime = new Date() - today[startingPomodoro].start
+    let elapsedTime = new Date() - entries[startingPomodoro].start
     console.log(elapsedTime)
     if(elapsedTime >= (4000) && startingPomodoro - 1 >= 0) {
       //today[startingPomodoro].end = new Date() TODO
-      today[startingPomodoro].end = new Date()
-      today[startingPomodoro].status = StatusEnum.COMPLETED
+      entries[startingPomodoro].end = new Date()
+      entries[startingPomodoro].status = StatusEnum.COMPLETED
       iteratePomodoro(startingPomodoro - 1)
 
     }
     else if(startingPomodoro == 0) {
-      today[startingPomodoro].end = new Date()
-      today[startingPomodoro].status = StatusEnum.COMPLETED
+      entries[startingPomodoro].end = new Date()
+      entries[startingPomodoro].status = StatusEnum.COMPLETED
       setStartingPomodoro(null)
       setStart(false)
     }
@@ -377,7 +378,7 @@ function App() {
       </div>
     </div>
     <Controls
-      today={today}
+      entries={entries}
       selectedEntry={selectedEntry}
       onClickPomodoro={onClickPomodoro}
       onClickStart={onClickStart}
@@ -391,7 +392,7 @@ function App() {
         setPomodoro={setPomodoro}
         onNewEntry={onNewEntry}
       />
-      <DiaryEntries today={today} onClickEntry={onClickEntry} />
+      <DiaryEntries entries={entries} onClickEntry={onClickEntry} />
     </div>
   
     </div>
