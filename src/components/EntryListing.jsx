@@ -4,11 +4,10 @@ import '../assets/scss/EntryDialog.css'
 import EntryDialog from '../components/EntryDialog'
 import {StatusEnum} from '../components/GlobalFunctions'
 
-export default function EntryListing({entry,onClickEntry}) {
+export default function EntryListing({entry,onClickEntry,isDialogOpen}) {
     let startTime = ""
-    const [isDialogOpen,setDialog] = useState(false)
     const [text,setText] = useState((entry.isPomodoro)?entry.start : entry.start.toLocaleTimeString() + " : " + entry.title)
-    console.log("here 2")
+    
     entry.setTitleText = function() {
         console.log(StatusEnum.NOTSTARTED + " is status")
         if(entry.status == StatusEnum.NOTSTARTED) {
@@ -24,9 +23,10 @@ export default function EntryListing({entry,onClickEntry}) {
             throw new Error("EntryListing.setTitleText: Status should not found")
         }
     }
-    
+    /*
     function onClickCloseDialog(e) {
-        setDialog(isDialogOpen?false:true)
+        entry.isDialogOpen = entry.isDialogOpen?false:true;
+        setDialog(entry.isDialogOpen)
     }
     function entryOnClickEntry(e) {
         let titleLine = ""
@@ -38,19 +38,20 @@ export default function EntryListing({entry,onClickEntry}) {
             titleLine = "I will be " + entry.title + " for " + entry.duration + " minutes"
         }
         
-        setDialog(isDialogOpen?false:true)
         onClickEntry(e,entry)
-    }
+    }*/
     useEffect(() => {
         entry.setTitleText()
     },[entry])
-
+    function localOnClickEntry(e) {
+        onClickEntry(e,entry)
+    }
     return (
         <React.Fragment>
             <div 
                 className={"entry-listing " + 
                     ((entry.isPomodoro && entry.status === StatusEnum.NOTSTARTED && entry.selectedClass !== "entry-selected")?"entry-pomodoro":entry.selectedClass)} 
-                onClick={entryOnClickEntry} 
+                onClick={localOnClickEntry} 
                 id={entry.id}>
                 <h3>
                     

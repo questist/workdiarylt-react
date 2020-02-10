@@ -43,6 +43,7 @@ function App() {
     isPomodoro: false,
     status: StatusEnum.APPSTARTED,
     duration: 0,
+    isDialogOpen: false,
   }
 
   const [entries, setEntries] = useState([initialEntry])
@@ -51,7 +52,7 @@ function App() {
   const addEntry = (entry) => {
     entries.unshift(entry)
     console.log("length: " + entries.length)
-    setEntries(entries)
+    //setEntries(entries)
   };
   
   //set currently selected entry
