@@ -37,28 +37,28 @@ function App() {
     id: "0_welcome",
     start: new Date(),
     end: null,
-    selectedClass: 'entry-selected',
     notes: "",
     rating: 0,
     isPomodoro: false,
     status: StatusEnum.APPSTARTED,
     duration: 0,
-    isDialogOpen: false,
   }
 
+ 
+  
+  //states
   const [entries, setEntries] = useState([initialEntry])
   const [isStarted,setStart] = useState(false)
+  const [runningEntry,setRunningEntry] = useState(entries[0])
+  const [startingPomodoro,setStartingPomodoro] = useState(null)
+  const [editPomodoro,setEditPomodoro] = useState(false)
+ 
 
   const addEntry = (entry) => {
     entries.unshift(entry)
     console.log("length: " + entries.length)
-    //setEntries(entries)
+    setEntries(entries)
   };
-  
-  //set currently selected entry
-  const [selectedEntry,setSelectedEntry] = useState(entries[entries.length-1]);
-  const [startingPomodoro,setStartingPomodoro] = useState(null)
-  const [editPomodoro,setEditPomodoro] = useState(false)
   //this is defined here to unselect the background color of the EntryListing component, try to move it in later
   function cssUnselectEntry(oldSelectedEntry) {
     //deselect the selected item
@@ -101,61 +101,26 @@ function App() {
   //handle the onClickHander of the NEXT ENTRY BUTTON by adding the next entry after it
   function onNewEntry(e) {
     //delete pomodoros
-    // if(today[0].isPomodoro) {
-    //   setStartingPomodoro(null)
-    //   fetchToday = today.filter(function(val,index) {
-    //     return !(val.isPomodoro && val.status !== StatusEnum.COMPLETED)
-    //   })
-    //   setToday(fetchToday)
-    // }
-    // else {
-    //   fetchToday = today
-    // }
+    if(entries[0].isPomodoro) {
+       setStartingPomodoro(null)
+       let fetchToday = entries.filter(function(val,index) {
+         return !(val.isPomodoro && val.status !== StatusEnum.COMPLETED)
+       })
+      setEntries(fetchToday)
+    }
 
-    // let l = fetchToday.length
-    // let topEntry = fetchToday[0]
-    // if(topEntry.status === StatusEnum.RUNNING) {
-    //   topEntry.end = new Date()
-    // }
-    // else {
-    //   console.log("Warning: The last Entry in Todays Entries end time was already set, while creating a new entry")
-    // }
-    // if(selectedEntry.isPomodoro === false) {
-    //   selectedEntry.selectedClass = "entry-unselected"
-    // }
     const extra = {
-      id: entries.length + selectedEntry.title.slice(0,5),
-      title: (selectedEntry.isPomodoro === false)?selectedEntry.title:"Logging my Activities",
-      status: StatusEnum.RUNNING
+      index: entries.length,
+      id: entries.length + runningEntry.title.slice(0,5),
+      title: (runningEntry.isPomodoro === false)?runningEntry.title:"Logging my Activities",
+      status: StatusEnum.RUNNING,
+      start: new Date()
     }
 
     const newobj = Object.assign({}, initialEntry, extra);
 
     addEntry(newobj)
-    console.log("Here")
-    
-    // fetchToday.unshift({
-    //   index: l,
-    //   title: (selectedEntry.isPomodoro === false)?selectedEntry.title:"Logging my Activities",
-    //   id: l + "_" + selectedEntry.title.slice(0,5),
-    //   start: new Date(),
-    //   end: null,
-    //   selectedClass: "entry-selected",
-    //   notes: "",
-    //   rating: 0,
-    //   isPomodoro: false,
-    //   status: StatusEnum.RUNNING,
-    //   duration: 0,
-    // })
-    
-    if(selectedEntry.isPomodoro === false) {
-      cssUnselectEntry(selectedEntry)
-    }
-    //cssSelectEntry(today[0])
-    //might reset if the top one is a pomodoro but thats ok
-    // if(fetchToday[1].status !== StatusEnum.APPSTARTED) {
-    //   fetchToday[1].status = StatusEnum.COMPLETED
-    // }
+    setRunningEntry(entries[0])
     
     // cssSetRatings(fetchToday[0])
     // setSelectedEntry(fetchToday[0])
@@ -163,7 +128,7 @@ function App() {
       setStart(true)
     }
   }
-
+/*
   function cssSetRatings(entry) {
     let stars = document.getElementsByClassName("star")
     Array.prototype.forEach.call(stars, function(el,index) {
@@ -209,9 +174,25 @@ function App() {
     }
     setSelectedEntry(entry);
   }
-
+*/
 
   function onClickPomodoro(e) {
+    //if runningEntry is still pomodoro the button is set to cancel so delete unfinished pomodoros
+    if(runningEntry.isPomodoro) {
+      setStartingPomodoro(null)
+       let fetchToday = entries.filter(function(val,index) {
+         if(val.isPomodoro && val.status !== StatusEnum.PAUSED) {
+          val.end = new Date()
+          let milliseconds = new Date(val.end - val.start)
+          let minutes = Math.ceil(milliseconds / 1000 / 60)
+          val.duration  = minutes
+          val.status = StatusEnum.COMPLETED
+          return true
+         }
+         return !(val.isPomodoro && val.status !== StatusEnum.COMPLETED)
+       })
+      setEntries(fetchToday)
+    }
     setEditPomodoro(true)
   }
   
@@ -219,6 +200,8 @@ function App() {
     setEditPomodoro(false)
   }
   function setPomodoro() {
+    setStart(false)
+    stopRunning()
     let title = document.getElementById("pomodoro-title").value
     let duration = document.getElementById("pomodoro-duration").value
     let shortBreak = document.getElementById("pomodoro-short-break").value
@@ -227,77 +210,57 @@ function App() {
     console.log("here" )
     let shortBreakCount = 0
     let longBreakCount = 0
-    let entries = entries.length
+    let startingLength = entries.length
+    let tmpEntry = null
     for(let i=0,n=0,s=0; i < number;) {
-      console.log("i = " + i)
       if(n < 4) {
         n++
         i++
         
-        entries.unshift({
+        tmpEntry = {
           index: entries.length,
           title: (title == "")?"Pomodoro " + i:title,
           id: entries.length + "_" + title.slice(0,5),
           start: "Pomodoro " + i,
-          end: 0,
-          selectedClass: "entry-unselected",
-          notes: "",
-          rating: 0,
           isPomodoro: true,
           status: StatusEnum.NOTSTARTED,
           duration: duration,
-        })
+        }
+        addEntry(tmpEntry)
       }
       if(s < 3 && i != number) {
         s++
         shortBreakCount++
-        entries.unshift({
+        tmpEntry = {
           index: entries.length,
           title: "Taking a Break",
           id: entries.length + "_sb",
           start: "Short Break " + shortBreakCount,
-          end: null,
-          selectedClass: "entry-unselected",
-          notes: "",
-          rating: 0,
           isPomodoro: true,
           status: StatusEnum.NOTSTARTED,
           duration: shortBreak,
-        })
+        }
+        addEntry(tmpEntry)
       }
       else if(i != number) {
         n = 0
         s = 0
-        console.log("i="+i + "/number="+number)
         longBreakCount++
-        entries.unshift({
+        tmpEntry = {
           index: entries.length,
           title: "Taking a Break",
           id: entries.length + "_lb",
           start: "Long Break " + longBreakCount,
-          end: null,
-          selectedClass: "entry-unselected",
-          notes: "",
-          rating: 0,
           isPomodoro: true,
           status: StatusEnum.NOTSTARTED,
           duration: longBreak,
-        })
+        }
+        addEntry(tmpEntry)
       }
     }
-    setStartingPomodoro(entries.length - entries - 1)
-    let lastPomodoro = entries[0]
-    lastPomodoro.selectedClass = "entry-selected"
-    
-    document.getElementsByClassName("entry-dialog")[0].style.top = "0px"
-    
-    cssUnselectEntry(selectedEntry)
+    setStartingPomodoro(entries.length - startingLength - 1)
     setEditPomodoro(false)
-    
-    cssSetRatings(lastPomodoro)
-   
-    setSelectedEntry(lastPomodoro)
-
+    setRunningEntry(entries[startingPomodoro])
   }
 
 
@@ -337,7 +300,7 @@ function App() {
       setStart(true)
       //if the last entry is a pomodoro then start at the first pomodoro in the sequence
       //remember the pomodoros are deleted on day save and on regular new entries which is why this works
-      if(entries[0].isPomodoro === true) {
+      if(entries[0].isPomodoro === true && entries[0].status !== StatusEnum.COMPLETED) {
         let starting = entries[startingPomodoro]
         if(starting.status == StatusEnum.PAUSED) starting.status = StatusEnum.RUNNING
         else iteratePomodoro(startingPomodoro)
@@ -345,11 +308,12 @@ function App() {
       //otherwise if the app just started start timing the first item
       else if(entries[0].status === StatusEnum.APPSTARTED) {
         entries[0].status = StatusEnum.RUNNING
+        entries[0].start = new Date()
       }
       //otherwise add a new entry because the app was paused
       else {
         console.log("here 2")
-        onNewEntry(1)
+        onNewEntry()
       }
     }
   }
@@ -358,15 +322,16 @@ function App() {
   function iteratePomodoro(index) {
     let start = entries[index]
     start.start = new Date()
-    //start.setTitleText()
-    cssUnselectEntry(selectedEntry)
-    cssSelectEntry(start)
-    cssMoveEntryDialog(start)
-    cssSetRatings(start)
-    setSelectedEntry(start)
-    setStartingPomodoro(index)
     start.status = StatusEnum.RUNNING
     start.setTitleText()
+    //cssUnselectEntry(runningEntry)
+    //cssSelectEntry(start)
+    //cssMoveEntryDialog(start)
+    
+    setRunningEntry(start)
+    setStartingPomodoro(index)
+    
+    //start.setTitleText()
   }
 
   function checkEntry() {
@@ -401,7 +366,7 @@ function App() {
     </div>
     <Controls
       entries={entries}
-      selectedEntry={selectedEntry}
+      selectedEntry={runningEntry}
       onClickPomodoro={onClickPomodoro}
       onClickStart={onClickStart}
       isStarted={isStarted}
@@ -413,7 +378,7 @@ function App() {
         setPomodoro={setPomodoro}
         cancelPomodoro={cancelPomodoro}
       />:<div></div>}
-      <DiaryEntries entries={entries} onClickEntry={onClickEntry} />
+      <DiaryEntries entries={entries} />
     </div>
   
     </div>

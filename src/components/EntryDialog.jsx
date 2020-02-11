@@ -7,7 +7,7 @@ import PomodoroField from './PomodoroField'
 import '../assets/scss/EntryDialog.css'
 import { StatusEnum } from './GlobalFunctions';
 
-export default function EntryDialog({entry}) {
+export default function EntryDialog({entry,setTitleText}) {
     let dialog = ""
     let titleLine = ""
     if(!entry.isPomodoro || entry.status === StatusEnum.COMPLETED) {
@@ -23,7 +23,7 @@ export default function EntryDialog({entry}) {
             <div>
                 <h3>{titleLine}</h3>
                 <div className="data-section">
-                    <TitleField entry={entry}/>
+                    <TitleField entry={entry} setTitleText={setTitleText}/>
                     <RatingField entry={entry} />
                     <NotesField entry={entry}/>
                 </div>

@@ -10,9 +10,10 @@
   height: -moz-fit-content;
   height: fit-content;
   text-align: left;
-  background-color: #595daf;
+  background-color: #ff0000;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  border-bottom: 2px solid white;
 }
 
 .entry-dialog > div {

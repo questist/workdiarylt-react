@@ -4,12 +4,12 @@ import RatingField from './RatingField'
 import NotesField from './NotesField'
 import TitleField from './TitleField'
 import PomodoroField from './PomodoroField'
-import '../assets/scss/EntryDialog.css'
+import '../assets/scss/PomodoroDialog.css'
 import { StatusEnum } from './GlobalFunctions';
 
 export default function EntryDialog({cancelPomodoro,setPomodoro}) {
     return (
-            <div className="entry-dialog">
+            <div className="pomodoro-dialog">
                 <div>
                     <label>What will you be doing? (Action Verb ie running) <input id="pomodoro-title"/></label>
                     <br/>

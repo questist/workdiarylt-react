@@ -9,8 +9,9 @@
     position: relative;
     height: fit-content;
     text-align: left;
-    background-color: $dark-foreground-color;
+    background-color: $light-bg-color;
     box-sizing: border-box;
+    border-bottom: 2px solid white;
     > div {
         background-color: $light-foreground-color;
         border: 3px solid white;

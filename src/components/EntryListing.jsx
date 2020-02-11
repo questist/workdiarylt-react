@@ -10,14 +10,15 @@ export default function EntryListing({entry,onClickEntry,isDialogOpen}) {
     
     entry.setTitleText = function() {
         console.log(StatusEnum.NOTSTARTED + " is status")
-        if(entry.status == StatusEnum.NOTSTARTED) {
+        if(entry.status === StatusEnum.NOTSTARTED) {
             setText((entry.isPomodoro)?entry.start : "READY" + " : " + entry.title)
         }
         else if(entry.status === StatusEnum.RUNNING || entry.status === StatusEnum.COMPLETED) {
             setText(entry.start.toLocaleTimeString() + " : " + entry.title)
         }
         else if(entry.status === StatusEnum.APPSTARTED) {
-            setText(entry.start.toLocaleTimeString() + " : " + "Welcome, Start your Work Diary Today")
+            let title = (entry.title === "Logging my activities")?"Welcome, Start your Work Diary Today":entry.title;
+            setText(entry.start.toLocaleTimeString() + " : " + title )
         }
         else {
             throw new Error("EntryListing.setTitleText: Status should not found")
@@ -46,13 +47,23 @@ export default function EntryListing({entry,onClickEntry,isDialogOpen}) {
     function localOnClickEntry(e) {
         onClickEntry(e,entry)
     }
+    let entryClass = ""
+    if(entry.isPomodoro && entry.status === StatusEnum.NOTSTARTED) {
+        entryClass = "entry-pomodoro"
+    }
+    else if(entry.status === StatusEnum.RUNNING) {
+        entryClass = "entry-selected"
+    }
+    else {
+        entryClass = "entry-unselected"
+    }
     return (
         <React.Fragment>
             <div 
-                className={"entry-listing " + 
-                    ((entry.isPomodoro && entry.status === StatusEnum.NOTSTARTED && entry.selectedClass !== "entry-selected")?"entry-pomodoro":entry.selectedClass)} 
+                className={"entry-listing " + entryClass} 
                 onClick={localOnClickEntry} 
-                id={entry.id}>
+                id={entry.id}
+                style={isDialogOpen?{borderBottom: "0"}:{}}>
                 <h3>
                     
                     {text}

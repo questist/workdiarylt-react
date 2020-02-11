@@ -7,12 +7,12 @@ export default function NotesField({entry}) {
         entry.notes = e.target.value
         setNote(entry.notes)
     }
-    useEffect(() => {document.forms.dialog.elements.note.value = entry.notes})
+    useEffect(() => {document.getElementById("note").value = entry.notes})
     return (
         <div className="notes-field">
-            <form name="dialog">
-                <label>Note<input name="note" type="textarea" value={note} onChange={onNotesChange}/></label>
-            </form>
+            
+                <label>Note<input name="note" id="note" type="textarea" value={note} onChange={onNotesChange}/></label>
+            
         </div>
     )
 }
