@@ -43,8 +43,10 @@ export default function EntryDialog({cancelPomodoro,setPomodoro}) {
                         min={10}
                         max={60}
                     />
-                    <Button text="Add Pomodoros" onClickHandler={setPomodoro} />
-                    <Button text="Cancel" onClickHandler={cancelPomodoro} />
+                    <div className="button-row">
+                        <Button text="Add Pomodoros" onClickHandler={setPomodoro} />
+                        <Button text="Cancel" onClickHandler={cancelPomodoro} />
+                    </div>
                 </div>
             </div>
         )

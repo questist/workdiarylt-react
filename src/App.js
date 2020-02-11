@@ -55,7 +55,8 @@ function App() {
  
 
   const addEntry = (entry) => {
-    entries.unshift(entry)
+    const newobj = Object.assign({}, initialEntry, entry);
+    entries.unshift(newobj)
     console.log("length: " + entries.length)
     setEntries(entries)
   };
@@ -117,9 +118,9 @@ function App() {
       start: new Date()
     }
 
-    const newobj = Object.assign({}, initialEntry, extra);
+    
 
-    addEntry(newobj)
+    addEntry(extra)
     setRunningEntry(entries[0])
     
     // cssSetRatings(fetchToday[0])
