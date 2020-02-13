@@ -42,6 +42,8 @@ function App() {
     isPomodoro: false,
     status: StatusEnum.APPSTARTED,
     duration: 0,
+    
+      
   }
 
  
