@@ -26,17 +26,36 @@ export default function DiaryEntries({entries}) {
         onClick Handler for when a listing entry is clicked on to toggle the EntryDialog
         also closes any open dialogs elsewhere in the list
     */
-    function onClickEntry(e,entry) {
+    function onClickEntry(e) {
+        let el = e.target
+        if(el.tagName === "H3") {
+        el = el.parentNode
+        }
+        let id = null;
+        //could use filter here
+        //need to extract the entry with the matching id passed from the today array of entry objects
+        try {
+        entries.forEach((val,index) => {
+            if(el.getAttribute('id') === val.id) { 
+            id = val.id
+            throw new Error("id found")
+            }
+        })
+        }
+        catch(e) {
+        //throw error
+        if(e.message !== "id found") throw new Error("No matching entry selected: onClickEntry() Handler")
+        }
         //if the dialog is different from the currently open dialog, also used when list is initialized
         //then open the dialog by setting the dialog STATE from the initial value which is open
-        if(entry.id !== dialogOptions.openId) {
-            let newOption = Object.assign({},initialOptions,{openId:entry.id})
+        if(id !== dialogOptions.openId) {
+            let newOption = Object.assign({},initialOptions,{openId:id})
             setDialog(newOption)
         }
         //otherwise the dialog is already open so set dialog STATE from the current dialog STATE
         //then clicking it to toggle it's viewing
         else {
-            let newOption = Object.assign({},dialogOptions,{openId:entry.id})
+            let newOption = Object.assign({},dialogOptions,{openId:id})
             newOption.clicked()
             setDialog(newOption)
         }
@@ -50,9 +69,15 @@ export default function DiaryEntries({entries}) {
         
             let e = (<EntryListing 
                 key={entry.id}
-                entry={entry}
+                id={entry.id}
                 onClickEntry={onClickEntry}
                 isDialogOpen={dialogOptions.isOpen(entry.id)}
+                Title={entry.Title}
+                listingTitle={entry.listingTitle}
+                dialogTitle={entry.dialogTitle}
+                Rating={entry.Rating}
+                Note={entry.Note}
+                className={entry.className}
             />)
             
             return e

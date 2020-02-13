@@ -15,21 +15,6 @@ import {StatusEnum} from './components/GlobalFunctions'
 import Controls from './components/Controls'
 
 function App() {
-  /*
-  //test variables for today
-  const values = ["Code","Break","Code","Lunch","Break"];
-  let entries = values.map((val,index) => {
-    return {
-        index: index,
-        title: val,
-        id:index + "_" + val,
-        start:(startTime+= 1) + ":00PM",
-        end:(endTime+= 1) + ":00PM",
-    }
-  })
-
-  entries[entries.length-1].selected = true;
-  */
 
   let initialEntry = {
     index: 0,
@@ -42,8 +27,76 @@ function App() {
     isPomodoro: false,
     status: StatusEnum.APPSTARTED,
     duration: 0,
+    /* had to use regular functions for these setter because they can't be passed as arguments or props
+       currently the only ones with getters and setters are passed as props to components
+       all other entry properties are used in the same context as the entries list is defined
+       so state has effectively been raised to this context now */
     
-      
+    Title: function(text) {
+      if(text === undefined)
+        return this.title
+      this.title = text
+    },
+    Rating: function(rating) {
+      if(rating === undefined)
+        return this.rating
+      this.rating = rating
+    },
+    Note: function(note) {
+      if(note === undefined)
+        return this.note
+      this.note = note
+    },
+    Duration: function(duration) {
+      if(duration === undefined)
+        return this.duration
+      this.duration = duration
+    },
+    /* automagical getter with no corresponding property - computed getters */
+    get className() {
+      if(this.isPomodoro && this.status === StatusEnum.NOTSTARTED) {
+          return "entry-pomodoro"
+      }
+      else if(this.status === StatusEnum.RUNNING) {
+          return "entry-selected"
+      }
+      else {
+          return "entry-unselected"
+      }
+    },
+    get listingTitle() {
+      //status of a Pomodor is the only one that starts at NOTSTARTED
+      //entry.start is the only text value for pomodoro not start.date() class like when once it is started
+      if(this.status === StatusEnum.NOTSTARTED) {
+          return this.start
+      }
+      //status once the entrylisting has been started once
+      else if(this.status === StatusEnum.RUNNING 
+              || this.status === StatusEnum.COMPLETED
+              || this.status === StatusEnum.PAUSED) {
+          return this.start.toLocaleTimeString() + " : " + this.title
+      }
+      //initial status for the app once it is opened, only one entry that hasn't been started
+      else if(this.status === StatusEnum.APPSTARTED) {
+          //let title = (entry.title === "Logging my activities")?"Welcome, Start your Work Diary Today":entry.title;
+          return this.start.toLocaleTimeString() + " : " + "Welcome, Start your Work Diary Today"
+      }
+      else {
+          throw new Error("EntryListing.setTitleText: Status should not found")
+      }
+    },
+    get dialogTitle() {
+      let titleLine = ""
+      if(!this.isPomodoro || this.status === StatusEnum.COMPLETED) {
+              let forString = (this.status === StatusEnum.COMPLETED)?(" for " + this.duration + " minutes"):""
+              titleLine = "I felt like " + this.Title() + 
+                      " entries at " + this.start.toLocaleTimeString() + forString
+      }
+      else {
+          titleLine = "I will be " + this.Title() + " for " + this.duration + " minutes"
+      }
+      return titleLine
+    },
   }
 
  
@@ -131,22 +184,8 @@ function App() {
       setStart(true)
     }
   }
-/*
-  function cssSetRatings(entry) {
-    let stars = document.getElementsByClassName("star")
-    Array.prototype.forEach.call(stars, function(el,index) {
-        let tokens = el.classList
-        if(index < entry.rating) {
-            tokens.remove("star-unselected")
-            tokens.add("star-selected")
-        }
-        else {
-            tokens.remove("star-selected")
-            tokens.add("star-unselected")
-        }
-    })
-  }
 
+  /* Saved this snippet for if I need to find the id from an entry listing event object 
   //change currently selected entry when clicked
   function onClickEntry(e) {
     let el = e.target
@@ -168,17 +207,14 @@ function App() {
       //throw error
       if(e.message !== "id found") throw new Error("No matching entry selected: onClickEntry() Handler")
     }
-    
-    if(entry.id !== selectedEntry.id) {
-      cssUnselectEntry(selectedEntry)
-      cssSelectEntry(entry)
-      cssMoveEntryDialog(entry)
-      cssSetRatings(entry)
-    }
-    setSelectedEntry(entry);
-  }
-*/
+    */
 
+  /*
+    onClickHandler for the Pomodoro button in Controls
+    it has two states
+    CANCEL - to stop all existing Pomodoros that haven't been started yet
+    POMODORO - to open the pomodoro dialog box
+  */
   function onClickPomodoro(e) {
     //if runningEntry is still pomodoro the button is set to cancel so delete unfinished pomodoros
     if(runningEntry.isPomodoro) {
@@ -196,23 +232,41 @@ function App() {
        })
       setEntries(fetchToday)
     }
-    setEditPomodoro(true)
+    //otherwise open the pomodoro dialog/modal
+    else {
+      setEditPomodoro(true)
+    }
   }
-  
+  /*
+    onClickHandler in the PomodoroDialog for canceling the Pomodoro set up process
+    just closes the dialog/modal
+  */
   function cancelPomodoro(e) {
     setEditPomodoro(false)
   }
+
+  /*
+    onClickHandler for ADD POMODORO button in Pomodoro dialog
+    that does the Pomodoro Set Up Process 
+  */
   function setPomodoro() {
+    //set the start buttons state in controls
     setStart(false)
+    //stop the current entrylisting from running if it is being timed
+    //NOTE: see if you can merge the above state change into stopRunning
     stopRunning()
+    //get values from the PomodoroDialog Component
     let title = document.getElementById("pomodoro-title").value
     let duration = document.getElementById("pomodoro-duration").value
     let shortBreak = document.getElementById("pomodoro-short-break").value
     let longBreak = document.getElementById("pomodoro-long-break").value
     let number = document.getElementById("pomodoro-number").value 
-    console.log("here" )
+    
+    //variable for titles of the Pomodoro breaks because they don't repeat within loop
     let shortBreakCount = 0
     let longBreakCount = 0
+
+    //save the length for later use in calculating startingPomodoro State
     let startingLength = entries.length
     let tmpEntry = null
     for(let i=0,n=0,s=0; i < number;) {
@@ -261,19 +315,30 @@ function App() {
         addEntry(tmpEntry)
       }
     }
+    //set the state that is used as an index for the currently running pomodoro
     setStartingPomodoro(entries.length - startingLength - 1)
+    //close the pomodoro dialog
     setEditPomodoro(false)
+    //just save the currently running pomodoro for easy access
+    //NOTE: see if you can remove this since you have the index
     setRunningEntry(entries[startingPomodoro])
   }
 
-
-
+  /*
+    stops the app EntryListing that is currently being timed
+  */
   function stopRunning() {
+    //when startingPomodoro is not null there are pomodoros currently running
+    //so pause them
     if(startingPomodoro !== null) {
       let start = entries[startingPomodoro]
       start.status = StatusEnum.PAUSED
+      //set end time just in case the pomodoros are canceled
       start.end = new Date()
     }
+    //otherwise this is definitly a regular entry and can be COMPLETED
+    //NOTE: the timer automatically stops timing currently if isStart is set
+    //      so maybe move that logic into stop running - check places where setStart is set
     else {
       let start = entries[0]
       start.status = StatusEnum.COMPLETED
@@ -313,38 +378,37 @@ function App() {
         entries[0].status = StatusEnum.RUNNING
         entries[0].start = new Date()
       }
-      //otherwise add a new entry because the app was paused
+      //otherwise add a new entry because the last entry was completed
+      //and there are not still pomodoros to be run
       else {
-        console.log("here 2")
         onNewEntry()
       }
     }
   }
 
-  
+  /*
+    sets up the next pomodoro and starts it running
+  */
   function iteratePomodoro(index) {
     let start = entries[index]
     start.start = new Date()
     start.status = StatusEnum.RUNNING
-    //start.setTitleText()
-    //cssUnselectEntry(runningEntry)
-    //cssSelectEntry(start)
-    //cssMoveEntryDialog(start)
-    
     setRunningEntry(start)
     setStartingPomodoro(index)
     
     //start.setTitleText()
   }
 
+  /*
+    Used by the timer to move from Pomodoro to the next Pomodoro
+    Not used in entries that are not pomodoros
+  */
   function checkEntry() {
     if(isStarted === false || startingPomodoro === null) return
-    console.log(entries[startingPomodoro].start)
    
     let elapsedTime = new Date() - entries[startingPomodoro].start
-    console.log(elapsedTime)
+    //TODO: Move this some of this into iteratePomodoro
     if(elapsedTime >= (4000) && startingPomodoro - 1 >= 0) {
-      //today[startingPomodoro].end = new Date() TODO
       entries[startingPomodoro].end = new Date()
       entries[startingPomodoro].status = StatusEnum.COMPLETED
       iteratePomodoro(startingPomodoro - 1)
@@ -353,6 +417,7 @@ function App() {
     else if(startingPomodoro == 0) {
       entries[startingPomodoro].end = new Date()
       entries[startingPomodoro].status = StatusEnum.COMPLETED
+      //Set states to stop the app from timing
       setStartingPomodoro(null)
       setStart(false)
     }
@@ -368,7 +433,7 @@ function App() {
       </div>
     </div>
     <Controls
-      entries={entries}
+      entries={entries.length}
       selectedEntry={runningEntry}
       onClickPomodoro={onClickPomodoro}
       onClickStart={onClickStart}

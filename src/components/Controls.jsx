@@ -3,7 +3,7 @@ import Button from '../components/Button'
 import Timer from '../components/Timer'
 
 const Controls = ({
-    entries, selectedEntry, onClickPomodoro, onClickStart, isStarted, checkEntry
+    entriesLength, selectedEntry, onClickPomodoro, onClickStart, isStarted, checkEntry
 }) => {
     return (
         <div className="work-toolbar">
@@ -22,7 +22,7 @@ const Controls = ({
                 <Timer entry={selectedEntry} isRunning={isStarted} checkEntry={checkEntry}/>
             </div>
             <div>
-                <h5>{entries.length} Entries</h5>
+                <h5>{entriesLength} Entries</h5>
             </div>
             </div>
     );

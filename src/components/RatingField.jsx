@@ -2,21 +2,27 @@ import React from 'react'
 import '../assets/scss/RatingField.css'
 
 
-export default function RatingField({entry}) {
+export default function RatingField({Rating}) {
     let svgs = []
 
 
     for(let i = 1;i <= 5;i++) {
         let selectedClass = ""
-        
-        if(i <= entry.rating && entry.rating !== 0) {
+        let selectedStars = Rating()
+        if(i <= selectedStars && selectedStars !== 0) {
             selectedClass = "star-selected"
         }
         else {
             selectedClass = "star-unselected"
         }
         svgs.push(<svg version="1.1" key={"st"+i} x="0px" y="0px" viewBox="80 64 90 81" >
-            <polygon onClick={onStarClick} onMouseLeave={onStarLeave} onMouseEnter={onStarEnter} className={"star " + selectedClass } id={"st" + i} points="124.58,64.42 137.59,94.8 166.7,95.03 145.64,116.56 152.61,144.54 124.58,124.86 96.54,144.54 103.52,116.56 82.45,95.03 111.56,94.8 "/>
+            <polygon
+                onClick={onStarClick}
+                onMouseLeave={onStarLeave}
+                onMouseEnter={onStarEnter}
+                className={"star " + selectedClass }
+                id={"st" + i}
+                points="124.58,64.42 137.59,94.8 166.7,95.03 145.64,116.56 152.61,144.54 124.58,124.86 96.54,144.54 103.52,116.56 82.45,95.03 111.56,94.8 "/>
             </svg>
         )
     }
@@ -41,7 +47,7 @@ export default function RatingField({entry}) {
         let s = id[id.length -1]
         let stars = document.getElementsByClassName("star")
         Array.prototype.forEach.call(stars,function(el,index) {
-            if(index < s && entry.rating <= index) {
+            if(index < s && Rating() <= index) {
                 let tokens = el.classList
                 tokens.remove("star-selected")
                 tokens.add("star-unselected")
@@ -54,7 +60,7 @@ export default function RatingField({entry}) {
             return
         let id = e.target.getAttribute("id")
         let s = id[id.length - 1]
-        entry.rating = s
+        Rating(s)
         let stars = document.getElementsByClassName("star")
         Array.prototype.forEach.call(stars, function(el,index) {
             let tokens = el.classList
