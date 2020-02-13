@@ -324,7 +324,7 @@ function App() {
     let start = entries[index]
     start.start = new Date()
     start.status = StatusEnum.RUNNING
-    start.setTitleText()
+    //start.setTitleText()
     //cssUnselectEntry(runningEntry)
     //cssSelectEntry(start)
     //cssMoveEntryDialog(start)

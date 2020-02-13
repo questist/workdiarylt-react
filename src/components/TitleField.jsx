@@ -1,13 +1,13 @@
 import React,{useState,useEffect} from 'react'
 import '../assets/scss/NotesField.css'
 
-export default function TitleField({entry}) {
+export default function TitleField({entry,setTitleText}) {
     const [note,setNote] = useState(entry.title)
     function onTitleChange(e) {
         entry.title = e.target.value
         setNote(entry.title)
         
-        entry.setTitleText()
+        setTitleText()
 
     }
     function selectInputText(e) {

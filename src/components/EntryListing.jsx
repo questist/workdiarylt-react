@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState, useEffect, useRef, useCallback} from 'react'
 import '../assets/scss/EntryListing.css'
 import '../assets/scss/EntryDialog.css'
 import EntryDialog from '../components/EntryDialog'
@@ -6,23 +6,25 @@ import {StatusEnum} from '../components/GlobalFunctions'
 
 export default function EntryListing({entry,onClickEntry,isDialogOpen}) {
     let startTime = ""
-    const [text,setText] = useState((entry.isPomodoro)?entry.start : entry.start.toLocaleTimeString() + " : " + entry.title)
-    
-    entry.setTitleText = function() {
-        console.log(StatusEnum.NOTSTARTED + " is status")
+    const text = useRef((entry.isPomodoro)?entry.start : entry.start.toLocaleTimeString() + " : " + entry.title)
+
+    function setTitleText() {
+            
         if(entry.status === StatusEnum.NOTSTARTED) {
-            setText((entry.isPomodoro)?entry.start : "READY" + " : " + entry.title)
+            text.current = (entry.isPomodoro)?entry.start : "READY" + " : " + entry.title
         }
         else if(entry.status === StatusEnum.RUNNING || entry.status === StatusEnum.COMPLETED) {
-            setText(entry.start.toLocaleTimeString() + " : " + entry.title)
+            text.current = entry.start.toLocaleTimeString() + " : " + entry.title
         }
         else if(entry.status === StatusEnum.APPSTARTED) {
             let title = (entry.title === "Logging my activities")?"Welcome, Start your Work Diary Today":entry.title;
-            setText(entry.start.toLocaleTimeString() + " : " + title )
+            text.current = entry.start.toLocaleTimeString() + " : " + title
         }
         else {
             throw new Error("EntryListing.setTitleText: Status should not found")
         }
+        
+
     }
     /*
     function onClickCloseDialog(e) {
@@ -40,13 +42,15 @@ export default function EntryListing({entry,onClickEntry,isDialogOpen}) {
         }
         
         onClickEntry(e,entry)
-    }*/
+    }
     useEffect(() => {
         entry.setTitleText()
-    },[entry])
+    },[entry])*/
+    setTitleText()
     function localOnClickEntry(e) {
         onClickEntry(e,entry)
     }
+    
     let entryClass = ""
     if(entry.isPomodoro && entry.status === StatusEnum.NOTSTARTED) {
         entryClass = "entry-pomodoro"
@@ -64,14 +68,11 @@ export default function EntryListing({entry,onClickEntry,isDialogOpen}) {
                 onClick={localOnClickEntry} 
                 id={entry.id}
                 style={isDialogOpen?{borderBottom: "0"}:{}}>
-                <h3>
-                    
-                    {text}
-            
-                </h3>
                 
+                <h3>{text.current}</h3>
             </div>
-            {isDialogOpen && <EntryDialog entry={entry} />}
+
+            {isDialogOpen && <EntryDialog entry={entry} setTitleText={setTitleText} />}
         </React.Fragment>
     )
 }

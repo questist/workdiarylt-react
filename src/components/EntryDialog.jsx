@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import Button from './Button'
 import RatingField from './RatingField'
 import NotesField from './NotesField'
@@ -9,13 +9,22 @@ import { StatusEnum } from './GlobalFunctions';
 
 export default function EntryDialog({entry,setTitleText}) {
     let dialog = ""
-    let titleLine = ""
-    if(!entry.isPomodoro || entry.status === StatusEnum.COMPLETED) {
-            let forString = (entry.status === StatusEnum.COMPLETED)?(" for " + entry.duration + " minutes"):""
-            titleLine = "I felt like " + entry.title + " entries at " + entry.start.toLocaleTimeString() + forString
+    const [titleLine,setTitle] = useState(getTitleLine())
+    function getTitleLine() {
+        let titleLine = ""
+        if(!entry.isPomodoro || entry.status === StatusEnum.COMPLETED) {
+                let forString = (entry.status === StatusEnum.COMPLETED)?(" for " + entry.duration + " minutes"):""
+                titleLine = "I felt like " + entry.title + " entries at " + entry.start.toLocaleTimeString() + forString
+        }
+        else {
+            titleLine = "I will be " + entry.title + " for " + entry.duration + " minutes"
+        }
+        return titleLine
     }
-    else {
-        titleLine = "I will be " + entry.title + " for " + entry.duration + " minutes"
+    
+    function localSetTitleText() {
+        setTitle(getTitleLine())
+        setTitleText()
     }
     
     dialog = (
@@ -23,12 +32,12 @@ export default function EntryDialog({entry,setTitleText}) {
             <div>
                 <h3>{titleLine}</h3>
                 <div className="data-section">
-                    <TitleField entry={entry} setTitleText={setTitleText}/>
+                    <TitleField entry={entry} setTitleText={localSetTitleText}/>
                     <RatingField entry={entry} />
                     <NotesField entry={entry}/>
                 </div>
                 <div className="button-row">
-                    <Button text="Edit"/>
+                    <Button text="Save"/>
                 </div>
             </div>
         </div>

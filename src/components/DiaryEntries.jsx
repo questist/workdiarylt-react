@@ -6,7 +6,7 @@ import '../assets/scss/DiaryEntries.css'
 export default function DiaryEntries({entries}) {
     const initialOptions = {
         openId: null,
-        open: false,
+        open: true,
         clicked: function() {
             this.open = !this.open   
         },
@@ -28,11 +28,9 @@ export default function DiaryEntries({entries}) {
     */
     function onClickEntry(e,entry) {
         //if the dialog is different from the currently open dialog, also used when list is initialized
-        //then open the dialog by setting the dialog STATE from the initial value which has starts as closed
-        //then click it 
+        //then open the dialog by setting the dialog STATE from the initial value which is open
         if(entry.id !== dialogOptions.openId) {
             let newOption = Object.assign({},initialOptions,{openId:entry.id})
-            newOption.clicked()
             setDialog(newOption)
         }
         //otherwise the dialog is already open so set dialog STATE from the current dialog STATE
