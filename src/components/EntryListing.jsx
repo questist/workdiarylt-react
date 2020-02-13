@@ -9,11 +9,11 @@ export default function EntryListing({entry,onClickEntry,isDialogOpen}) {
     const text = useRef((entry.isPomodoro)?entry.start : entry.start.toLocaleTimeString() + " : " + entry.title)
 
     function setTitleText() {
-            
+        //Entry is always a Pomodoro when NOTSTARTED
         if(entry.status === StatusEnum.NOTSTARTED) {
-            text.current = (entry.isPomodoro)?entry.start : "READY" + " : " + entry.title
+            text.current = entry.start
         }
-        else if(entry.status === StatusEnum.RUNNING || entry.status === StatusEnum.COMPLETED) {
+        else if(entry.status === StatusEnum.RUNNING || entry.status === StatusEnum.COMPLETED || entry.status === StatusEnum.PAUSED) {
             text.current = entry.start.toLocaleTimeString() + " : " + entry.title
         }
         else if(entry.status === StatusEnum.APPSTARTED) {
