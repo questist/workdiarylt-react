@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState,useContext} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import DiaryEntries from './components/DiaryEntries'
@@ -16,7 +16,8 @@ import Controls from './components/Controls'
 
 function App() {
 
-  let initialEntry = {
+  /* initialEntry for the data cache for the context */
+  var initialEntry = {
     index: 0,
     title: "Logging my activities",
     id: "0_welcome",
@@ -32,22 +33,22 @@ function App() {
        all other entry properties are used in the same context as the entries list is defined
        so state has effectively been raised to this context now */
     
-    Title: function(text) {
+    Title(text) {
       if(text === undefined)
         return this.title
       this.title = text
     },
-    Rating: function(rating) {
+    Rating(rating) {
       if(rating === undefined)
         return this.rating
       this.rating = rating
     },
-    Note: function(note) {
+    Note(note) {
       if(note === undefined)
         return this.note
       this.note = note
     },
-    Duration: function(duration) {
+    Duration(duration) {
       if(duration === undefined)
         return this.duration
       this.duration = duration
@@ -99,10 +100,9 @@ function App() {
     },
   }
 
- 
-  
+  const DataCache = React.createContext([initialEntry])
   //states
-  const [entries, setEntries] = useState([initialEntry])
+  //const [entries, setEntries] = useState([initialEntry])
   const [isStarted,setStart] = useState(false)
   const [runningEntry,setRunningEntry] = useState(entries[0])
   const [startingPomodoro,setStartingPomodoro] = useState(null)
@@ -113,7 +113,7 @@ function App() {
     const newobj = Object.assign({}, initialEntry, entry);
     entries.unshift(newobj)
     console.log("length: " + entries.length)
-    setEntries(entries)
+    //setEntries(entries)
   };
   //this is defined here to unselect the background color of the EntryListing component, try to move it in later
   function cssUnselectEntry(oldSelectedEntry) {
@@ -162,7 +162,8 @@ function App() {
        let fetchToday = entries.filter(function(val,index) {
          return !(val.isPomodoro && val.status !== StatusEnum.COMPLETED)
        })
-      setEntries(fetchToday)
+       entries = fetchToday
+      //setEntries(fetchToday)
     }
 
     const extra = {
@@ -230,7 +231,8 @@ function App() {
          }
          return !(val.isPomodoro && val.status !== StatusEnum.COMPLETED)
        })
-      setEntries(fetchToday)
+       entries = fetchToday
+      //setEntries(fetchToday)
     }
     //otherwise open the pomodoro dialog/modal
     else {
@@ -446,7 +448,9 @@ function App() {
         setPomodoro={setPomodoro}
         cancelPomodoro={cancelPomodoro}
       />:<div></div>}
-      <DiaryEntries entries={entries} />
+      <DataCache.Provider>
+        <DiaryEntries entries={entries} />
+      </DataCache.Provider>
     </div>
   
     </div>
