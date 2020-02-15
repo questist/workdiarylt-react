@@ -9,7 +9,7 @@ const Controls = ({
         <div className="work-toolbar">
             <div>
                 <div>
-                <Button text="Pomodoro"
+                <Button text={(selectedEntry.isPomodoro === true)?"Cancel":"Pomodoro"}
                     onClickHandler={onClickPomodoro} 
                     style={{marginTop: '10px',marginBottom: '10px',width: '102px'}}
                 />

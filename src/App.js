@@ -32,9 +32,8 @@ function App() {
     isPomodoro: false,
     status: StatusEnum.APPSTARTED,
     duration: 0,
-    /* getters and setters needed throughout app*/
     
-    /* automagical getter with no corresponding property - computed getters */
+    /* computed functions */
     className() {
       if(this.isPomodoro && this.status === StatusEnum.NOTSTARTED) {
           return "entry-pomodoro"
@@ -207,8 +206,13 @@ function App() {
     if(runningEntry.isPomodoro) {
       setStartingPomodoro(null)
        let fetchToday = entries.filter(function(val,index) {
-         if(val.isPomodoro && val.status !== StatusEnum.PAUSED) {
-          val.end = new Date()
+         //if a pomodoro is paused complete it now
+         if(val.isPomodoro && (val.status === StatusEnum.PAUSED || val.status === StatusEnum.RUNNING)) {
+          //the end date was set when it was paused but not when it was running
+          if(val.status === StatusEnum.RUNNING) {
+            val.end = new Date()
+          }
+          
           let milliseconds = new Date(val.end - val.start)
           let minutes = Math.ceil(milliseconds / 1000 / 60)
           val.duration  = minutes
@@ -217,7 +221,8 @@ function App() {
          }
          return !(val.isPomodoro && val.status !== StatusEnum.COMPLETED)
        })
-       entries = fetchToday
+       setRunningEntry(fetchToday[0])
+       setStartingPomodoro(null)
        setEntries(fetchToday)
     }
     //otherwise open the pomodoro dialog/modal
@@ -238,11 +243,19 @@ function App() {
     that does the Pomodoro Set Up Process 
   */
   function setPomodoro() {
-    //set the start buttons state in controls
-    setStart(false)
-    //stop the current entrylisting from running if it is being timed
-    //NOTE: see if you can merge the above state change into stopRunning
-    stopRunning()
+    //if the app hasn't run a pomodoro yet then remove the first entry and only entry
+    //currently this is the only place where this behaviour occurs so the code is here
+    //instead of stopRunning
+    if(entries[0].status === StatusEnum.APPSTARTED) {
+      entries.pop()
+    }
+    else {
+      //set the start buttons state in controls
+      setStart(false)
+      //stop the current entrylisting from running if it is being timed
+      //NOTE: see if you can merge the above state change into stopRunning
+      stopRunning()
+    }
     //get values from the PomodoroDialog Component
     let title = document.getElementById("pomodoro-title").value
     let duration = document.getElementById("pomodoro-duration").value
@@ -303,13 +316,16 @@ function App() {
         addEntry(tmpEntry)
       }
     }
-    //set the state that is used as an index for the currently running pomodoro
-    setStartingPomodoro(entries.length - startingLength - 1)
-    //close the pomodoro dialog
-    setEditPomodoro(false)
     //just save the currently running pomodoro for easy access
     //NOTE: see if you can remove this since you have the index
-    setRunningEntry(entries[startingPomodoro])
+    setRunningEntry(entries[entries.length - startingLength - 1])
+    //set the state that is used as an index for the currently running pomodoro
+    setStartingPomodoro(entries.length - startingLength - 1)
+     
+    //close the pomodoro dialog
+    setEditPomodoro(false)
+    
+   
   }
 
   /*
