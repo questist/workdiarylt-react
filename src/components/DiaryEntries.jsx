@@ -62,22 +62,14 @@ export default function DiaryEntries({entries}) {
         //dialogOptions.clicked()
     }
     //onclick rerenders this component so we had to add a effect to the state of the EntryListing
-    
-    console.log(entries.length)
 
     const entryList = entries.map((entry,index) => {
         
             let e = (<EntryListing 
-                key={entry.id}
-                id={entry.id}
+                key={entry.Id}
                 onClickEntry={onClickEntry}
-                isDialogOpen={dialogOptions.isOpen(entry.id)}
-                Title={entry.Title}
-                listingTitle={entry.listingTitle}
-                dialogTitle={entry.dialogTitle}
-                Rating={entry.Rating}
-                Note={entry.Note}
-                className={entry.className}
+                isDialogOpen={dialogOptions.isOpen(entry.Id)}
+                entry={entry}
             />)
             
             return e

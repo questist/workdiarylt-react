@@ -1,4 +1,4 @@
-import React, { useState,useContext} from 'react';
+import React, { useState,useContext,createContext} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import DiaryEntries from './components/DiaryEntries'
@@ -14,7 +14,17 @@ import diaryimgunselected from './assets/images/menu-diary-unselected.png'
 import {StatusEnum} from './components/GlobalFunctions'
 import Controls from './components/Controls'
 
+
+
 function App() {
+
+  const DataCache = {
+    cache:{
+      data: "Some Data"
+    }
+  }
+  
+  const Context = createContext(DataCache.cache)
 
   /* initialEntry for the data cache for the context */
   var initialEntry = {
@@ -28,30 +38,33 @@ function App() {
     isPomodoro: false,
     status: StatusEnum.APPSTARTED,
     duration: 0,
-    /* had to use regular functions for these setter because they can't be passed as arguments or props
-       currently the only ones with getters and setters are passed as props to components
-       all other entry properties are used in the same context as the entries list is defined
-       so state has effectively been raised to this context now */
-    
-    Title(text) {
-      if(text === undefined)
-        return this.title
-      this.title = text
+    /* getters and setters needed throughout app*/
+    get Id() {
+      return this.id
     },
-    Rating(rating) {
-      if(rating === undefined)
-        return this.rating
-      this.rating = rating
+    get Title() {
+      return this.title
     },
-    Note(note) {
-      if(note === undefined)
-        return this.note
-      this.note = note
+    set Title(t) {
+      this.title = t
     },
-    Duration(duration) {
-      if(duration === undefined)
-        return this.duration
-      this.duration = duration
+    get Rating() {
+      return this.rating
+    },
+    set Rating(r) {
+      this.rating = r
+    },
+    get Note() {
+      return this.note
+    },
+    set Note(n) {
+      this.note = n
+    },
+    get Duration() {
+      return this.duration
+    },
+    set Duration(d) {
+      this.duration = d
     },
     /* automagical getter with no corresponding property - computed getters */
     get className() {
@@ -90,19 +103,19 @@ function App() {
       let titleLine = ""
       if(!this.isPomodoro || this.status === StatusEnum.COMPLETED) {
               let forString = (this.status === StatusEnum.COMPLETED)?(" for " + this.duration + " minutes"):""
-              titleLine = "I felt like " + this.Title() + 
+              titleLine = "I felt like " + this.Title + 
                       " entries at " + this.start.toLocaleTimeString() + forString
       }
       else {
-          titleLine = "I will be " + this.Title() + " for " + this.duration + " minutes"
+          titleLine = "I will be " + this.Title + " for " + this.duration + " minutes"
       }
       return titleLine
     },
   }
 
-  const DataCache = React.createContext([initialEntry])
+  
   //states
-  //const [entries, setEntries] = useState([initialEntry])
+  const [entries, setEntries] = useState([initialEntry])
   const [isStarted,setStart] = useState(false)
   const [runningEntry,setRunningEntry] = useState(entries[0])
   const [startingPomodoro,setStartingPomodoro] = useState(null)
@@ -113,7 +126,7 @@ function App() {
     const newobj = Object.assign({}, initialEntry, entry);
     entries.unshift(newobj)
     console.log("length: " + entries.length)
-    //setEntries(entries)
+    setEntries(entries)
   };
   //this is defined here to unselect the background color of the EntryListing component, try to move it in later
   function cssUnselectEntry(oldSelectedEntry) {
@@ -163,7 +176,7 @@ function App() {
          return !(val.isPomodoro && val.status !== StatusEnum.COMPLETED)
        })
        entries = fetchToday
-      //setEntries(fetchToday)
+       setEntries(fetchToday)
     }
 
     const extra = {
@@ -232,7 +245,7 @@ function App() {
          return !(val.isPomodoro && val.status !== StatusEnum.COMPLETED)
        })
        entries = fetchToday
-      //setEntries(fetchToday)
+       setEntries(fetchToday)
     }
     //otherwise open the pomodoro dialog/modal
     else {
@@ -448,9 +461,9 @@ function App() {
         setPomodoro={setPomodoro}
         cancelPomodoro={cancelPomodoro}
       />:<div></div>}
-      <DataCache.Provider>
+      <Context.Provider value={DataCache.cache}>
         <DiaryEntries entries={entries} />
-      </DataCache.Provider>
+      </Context.Provider>
     </div>
   
     </div>

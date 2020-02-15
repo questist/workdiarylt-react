@@ -5,26 +5,21 @@ import EntryDialog from '../components/EntryDialog'
 import {StatusEnum} from '../components/GlobalFunctions'
 
 export default function EntryListing({
-    id,onClickEntry,isDialogOpen,dialogTitle,listingTitle,Title,Note,Rating,className
+    onClickEntry,isDialogOpen,entry
 }) {
     
     return (
         <React.Fragment>
             <div 
-                className={"entry-listing " + className} 
+                className={"entry-listing " + entry.className} 
                 onClick={onClickEntry} 
-                id={id}
+                id={entry.Id}
                 style={isDialogOpen?{borderBottom: "0"}:{}}>
                 
-                <h3>{listingTitle}</h3>
+                <h3>{entry.listingTitle}</h3>
             </div>
 
-            {isDialogOpen && <EntryDialog
-                dialogTitle={dialogTitle}
-                Title={Title}
-                Rating={Rating}
-                Note={Note}
-            />}
+            {isDialogOpen && <EntryDialog entry={entry} />}
         </React.Fragment>
     )
 }

@@ -8,23 +8,23 @@ import '../assets/scss/EntryDialog.css'
 import { StatusEnum } from './GlobalFunctions';
 
 export default function EntryDialog({
-    dialogTitle,Title,Note,Rating
+    entry
 }) {
     let dialog = ""
-    const [titleLine,setDialogTitle] = useState(dialogTitle)
+    const [titleLine,setDialogTitle] = useState(entry.dialogTitle)
     
     function onTitleChange(titleInputValue) {
-        Title(titleInputValue)
-        setDialogTitle(dialogTitle)
+        entry.Title = titleInputValue
+        setDialogTitle(entry.dialogTitle)
     }
     dialog = (
         <div className="entry-dialog">
             <div>
-                <h3>{titleLine}</h3>
+                <h3>{entry.titleLine}</h3>
                 <div className="data-section">
-                    <TitleField Title={Title} setTitle={onTitleChange}/>
-                    <RatingField Rating={Rating} />
-                    <NotesField Note={Note}/>
+                    <TitleField entry={entry} onTitleChange={onTitleChange}/>
+                    <RatingField entry={entry} />
+                    <NotesField entry={entry}/>
                 </div>
                 <div className="button-row">
                     <Button text="Save"/>
