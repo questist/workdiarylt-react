@@ -1,10 +1,7 @@
-import React, { useState,useContext,createContext} from 'react';
+import React, { useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import DiaryEntries from './components/DiaryEntries'
-import Timer from './components/Timer'
-import EntryDialog from './components/EntryDialog'
-import Button from './components/Button'
 import PomodoroDialog from './components/PomodoroDialog'
 import './assets/scss/app.css'
 import ltlogo from './assets/images/logo.png'
@@ -60,7 +57,7 @@ function App() {
       //initial status for the app once it is opened, only one entry that hasn't been started
       else if(this.status === StatusEnum.APPSTARTED) {
           //let title = (entry.title === "Logging my activities")?"Welcome, Start your Work Diary Today":entry.title;
-          return this.start.toLocaleTimeString() + " : " + "Welcome, Start your Work Diary Today"
+          return this.start.toLocaleTimeString() + " : Welcome, Start your Work Diary Today"
       }
       else {
           throw new Error("EntryListing.setTitleText: Status should not found")
@@ -100,44 +97,7 @@ function App() {
     console.log("length: " + entries.length)
     setEntries(entries)
   };
-  //this is defined here to unselect the background color of the EntryListing component, try to move it in later
-  function cssUnselectEntry(oldSelectedEntry) {
-    //deselect the selected item
-    let tokens = document.getElementById(oldSelectedEntry.id).classList
-    tokens.remove("entry-selected")
-    tokens.add("entry-unselected")
-    oldSelectedEntry.selectedClass = "entry-unselected"
-  }
-
-  //Moves the Entry Dialog
-  //returns the position of the newly selected Entry
-  function cssMoveEntryDialog(newlySelectedEntry) {
-    let heightOfDialog = 250
-    let heightOfEntry = 40
-
-    //lets change entry dialogs position relative to the selected entry
-    //now find it's position in the NodeList and calculate it's position on screen
-    let nodes = document.getElementsByClassName("entry-listing")
-    let i = 0
-    Array.prototype.forEach.call(nodes,function(val,index) {
-      if(val.getAttribute("id") === newlySelectedEntry.id) i = index
-    })
-      //for centering if((heightOfDialog/2) < (heightOfEntry * i)) {
-      document.getElementsByClassName("entry-dialog")[0].style.top = (heightOfEntry * i) + "px"
-    
-    return i
-  }
-
-  function cssSelectEntry(newlySelectedEntry) {
-    //this part is for when the item is click (ie onClickEntry) IF IT IS NOT A NEW ENTRY
-    
-    let el = document.getElementById(newlySelectedEntry.id)
-    let tokens = el.classList
-    tokens.remove("entry-unselected")
-    tokens.add("entry-selected")
-    newlySelectedEntry.selectedClass = "entry-selected"
-    
-  }
+  
   
   //handle the onClickHander of the NEXT ENTRY BUTTON by adding the next entry after it
   function onNewEntry(e) {
@@ -164,9 +124,7 @@ function App() {
     addEntry(extra)
     setRunningEntry(entries[0])
     
-    // cssSetRatings(fetchToday[0])
-    // setSelectedEntry(fetchToday[0])
-    if(isStarted == false) {
+    if(isStarted === false) {
       setStart(true)
     }
   }
@@ -277,7 +235,7 @@ function App() {
         
         tmpEntry = {
           index: entries.length,
-          title: (title == "")?"Pomodoro " + i:title,
+          title: (title === "")?"Pomodoro " + i:title,
           id: entries.length + "_" + title.slice(0,5),
           start: "Pomodoro " + i,
           isPomodoro: true,
@@ -286,7 +244,7 @@ function App() {
         }
         addEntry(tmpEntry)
       }
-      if(s < 3 && i != number) {
+      if(s < 3 && i !== number) {
         s++
         shortBreakCount++
         tmpEntry = {
@@ -300,7 +258,7 @@ function App() {
         }
         addEntry(tmpEntry)
       }
-      else if(i != number) {
+      else if(i !== number) {
         n = 0
         s = 0
         longBreakCount++
@@ -374,7 +332,7 @@ function App() {
       //remember the pomodoros are deleted on day save and on regular new entries which is why this works
       if(entries[0].isPomodoro === true && entries[0].status !== StatusEnum.COMPLETED) {
         let starting = entries[startingPomodoro]
-        if(starting.status == StatusEnum.PAUSED) starting.status = StatusEnum.RUNNING
+        if(starting.status === StatusEnum.PAUSED) starting.status = StatusEnum.RUNNING
         else iteratePomodoro(startingPomodoro)
       }
       //otherwise if the app just started start timing the first item
@@ -418,7 +376,7 @@ function App() {
       iteratePomodoro(startingPomodoro - 1)
 
     }
-    else if(startingPomodoro == 0) {
+    else if(startingPomodoro === 0) {
       entries[startingPomodoro].end = new Date()
       entries[startingPomodoro].status = StatusEnum.COMPLETED
       //Set states to stop the app from timing
