@@ -66,9 +66,9 @@ export default function DiaryEntries({entries}) {
     const entryList = entries.map((entry,index) => {
         
             let e = (<EntryListing 
-                key={entry.Id}
+                key={entry.id}
                 onClickEntry={onClickEntry}
-                isDialogOpen={dialogOptions.isOpen(entry.Id)}
+                isDialogOpen={dialogOptions.isOpen(entry.id)}
                 entry={entry}
             />)
             

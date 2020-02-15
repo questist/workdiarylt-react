@@ -2,10 +2,10 @@ import React,{useState,useEffect} from 'react'
 import '../assets/scss/NotesField.css'
 
 export default function TitleField({entry,onTitleChange}) {
-    const [note,setNote] = useState(entry.Title)
+    const [note,setNote] = useState(entry.title)
     function localOnTitleChange(e) {
-        entry.Title = e.target.value 
-        setNote(entry.Title)
+        entry.title = e.target.value 
+        setNote(entry.title)
         
         onTitleChange()
 

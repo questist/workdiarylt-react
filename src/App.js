@@ -11,20 +11,14 @@ import ltlogo from './assets/images/logo.png'
 import workimgselected from './assets/images/menu-work-selected.png'
 import diaryimgunselected from './assets/images/menu-diary-unselected.png'
 //import alarm from './assets/audio/alarm.mp3'
-import {StatusEnum} from './components/GlobalFunctions'
+import {StatusEnum,Context,DataCache} from './components/GlobalFunctions'
 import Controls from './components/Controls'
 
 
 
 function App() {
 
-  const DataCache = {
-    cache:{
-      data: "Some Data"
-    }
-  }
   
-  const Context = createContext(DataCache.cache)
 
   /* initialEntry for the data cache for the context */
   var initialEntry = {
@@ -39,35 +33,9 @@ function App() {
     status: StatusEnum.APPSTARTED,
     duration: 0,
     /* getters and setters needed throughout app*/
-    get Id() {
-      return this.id
-    },
-    get Title() {
-      return this.title
-    },
-    set Title(t) {
-      this.title = t
-    },
-    get Rating() {
-      return this.rating
-    },
-    set Rating(r) {
-      this.rating = r
-    },
-    get Note() {
-      return this.note
-    },
-    set Note(n) {
-      this.note = n
-    },
-    get Duration() {
-      return this.duration
-    },
-    set Duration(d) {
-      this.duration = d
-    },
+    
     /* automagical getter with no corresponding property - computed getters */
-    get className() {
+    className() {
       if(this.isPomodoro && this.status === StatusEnum.NOTSTARTED) {
           return "entry-pomodoro"
       }
@@ -78,7 +46,7 @@ function App() {
           return "entry-unselected"
       }
     },
-    get listingTitle() {
+    listingTitle() {
       //status of a Pomodor is the only one that starts at NOTSTARTED
       //entry.start is the only text value for pomodoro not start.date() class like when once it is started
       if(this.status === StatusEnum.NOTSTARTED) {
@@ -99,15 +67,15 @@ function App() {
           throw new Error("EntryListing.setTitleText: Status should not found")
       }
     },
-    get dialogTitle() {
+    dialogTitle() {
       let titleLine = ""
       if(!this.isPomodoro || this.status === StatusEnum.COMPLETED) {
               let forString = (this.status === StatusEnum.COMPLETED)?(" for " + this.duration + " minutes"):""
-              titleLine = "I felt like " + this.Title + 
+              titleLine = "I felt like " + this.title + 
                       " entries at " + this.start.toLocaleTimeString() + forString
       }
       else {
-          titleLine = "I will be " + this.Title + " for " + this.duration + " minutes"
+          titleLine = "I will be " + this.title + " for " + this.duration + " minutes"
       }
       return titleLine
     },

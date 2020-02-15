@@ -8,7 +8,7 @@ export default function RatingField({entry}) {
 
     for(let i = 1;i <= 5;i++) {
         let selectedClass = ""
-        let selectedStars = entry.Rating
+        let selectedStars = entry.rating
         if(i <= selectedStars && selectedStars !== 0) {
             selectedClass = "star-selected"
         }
@@ -60,7 +60,7 @@ export default function RatingField({entry}) {
             return
         let id = e.target.getAttribute("id")
         let s = id[id.length - 1]
-        entry.Rating = s
+        entry.rating = s
         let stars = document.getElementsByClassName("star")
         Array.prototype.forEach.call(stars, function(el,index) {
             let tokens = el.classList

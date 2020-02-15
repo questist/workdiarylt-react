@@ -11,10 +11,11 @@ export default function EntryDialog({
     entry
 }) {
     let dialog = ""
-    const [titleLine,setDialogTitle] = useState(entry.dialogTitle)
+    const [titleLine,setDialogTitle] = useState(entry.dialogTitle())
     
     function onTitleChange() {
-        setDialogTitle(entry.dialogTitle)
+
+        setDialogTitle(entry.dialogTitle())
     }
     dialog = (
         <div className="entry-dialog">

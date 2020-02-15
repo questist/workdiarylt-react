@@ -1,6 +1,8 @@
+import React,{createContext} from 'react'
 export default function Globals() {
     console.log("Work Diary LT, Ver .1 Beta")
 }
+
 
 let StatusEnum = {
     RUNNING: 1,
@@ -10,4 +12,12 @@ let StatusEnum = {
     APPSTARTED: 5,
 }
 
-export {StatusEnum}
+const DataCache = {
+    cache:{
+      data: "Some Data"
+    }
+  }
+  
+  const Context = createContext(DataCache.cache)
+
+export {StatusEnum,Context,DataCache}
