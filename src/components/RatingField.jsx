@@ -2,13 +2,13 @@ import React from 'react'
 import '../assets/scss/RatingField.css'
 
 
-export default function RatingField({Rating}) {
+export default function RatingField({entry}) {
     let svgs = []
 
 
     for(let i = 1;i <= 5;i++) {
         let selectedClass = ""
-        let selectedStars = Rating()
+        let selectedStars = entry.Rating
         if(i <= selectedStars && selectedStars !== 0) {
             selectedClass = "star-selected"
         }
@@ -47,7 +47,7 @@ export default function RatingField({Rating}) {
         let s = id[id.length -1]
         let stars = document.getElementsByClassName("star")
         Array.prototype.forEach.call(stars,function(el,index) {
-            if(index < s && Rating() <= index) {
+            if(index < s && entry.Rating <= index) {
                 let tokens = el.classList
                 tokens.remove("star-selected")
                 tokens.add("star-unselected")
@@ -60,7 +60,7 @@ export default function RatingField({Rating}) {
             return
         let id = e.target.getAttribute("id")
         let s = id[id.length - 1]
-        Rating(s)
+        entry.Rating = s
         let stars = document.getElementsByClassName("star")
         Array.prototype.forEach.call(stars, function(el,index) {
             let tokens = el.classList

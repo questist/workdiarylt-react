@@ -123,7 +123,12 @@ function App() {
  
 
   const addEntry = (entry) => {
-    const newobj = Object.assign({}, initialEntry, entry);
+    
+    const cloneInitial = Object.create(
+      Object.getPrototypeOf(initialEntry),
+      Object.getOwnPropertyDescriptors(initialEntry)
+    )
+    const newobj = Object.assign({}, cloneInitial, entry);
     entries.unshift(newobj)
     console.log("length: " + entries.length)
     setEntries(entries)
@@ -175,7 +180,7 @@ function App() {
        let fetchToday = entries.filter(function(val,index) {
          return !(val.isPomodoro && val.status !== StatusEnum.COMPLETED)
        })
-       entries = fetchToday
+       //entries = fetchToday
        setEntries(fetchToday)
     }
 

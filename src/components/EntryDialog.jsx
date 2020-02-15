@@ -13,14 +13,13 @@ export default function EntryDialog({
     let dialog = ""
     const [titleLine,setDialogTitle] = useState(entry.dialogTitle)
     
-    function onTitleChange(titleInputValue) {
-        entry.Title = titleInputValue
+    function onTitleChange() {
         setDialogTitle(entry.dialogTitle)
     }
     dialog = (
         <div className="entry-dialog">
             <div>
-                <h3>{entry.titleLine}</h3>
+                <h3>{titleLine}</h3>
                 <div className="data-section">
                     <TitleField entry={entry} onTitleChange={onTitleChange}/>
                     <RatingField entry={entry} />
