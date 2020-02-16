@@ -3,9 +3,7 @@ import Button from './Button'
 import RatingField from './RatingField'
 import NotesField from './NotesField'
 import TitleField from './TitleField'
-import PomodoroField from './PomodoroField'
 import '../assets/scss/EntryDialog.css'
-import { StatusEnum } from './GlobalFunctions';
 
 export default function EntryDialog({
     entry

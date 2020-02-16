@@ -8,7 +8,7 @@ import ltlogo from './assets/images/logo.png'
 import workimgselected from './assets/images/menu-work-selected.png'
 import diaryimgunselected from './assets/images/menu-diary-unselected.png'
 //import alarm from './assets/audio/alarm.mp3'
-import {StatusEnum,Context,DataCache} from './components/GlobalFunctions'
+import {StatusEnum} from './components/GlobalFunctions'
 import Controls from './components/Controls'
 
 
@@ -87,12 +87,7 @@ function App() {
  
 
   const addEntry = (entry) => {
-    
-    const cloneInitial = Object.create(
-      Object.getPrototypeOf(initialEntry),
-      Object.getOwnPropertyDescriptors(initialEntry)
-    )
-    const newobj = Object.assign({}, cloneInitial, entry);
+    const newobj = Object.assign({}, initialEntry, entry);
     entries.unshift(newobj)
     console.log("length: " + entries.length)
     setEntries(entries)
@@ -161,6 +156,7 @@ function App() {
   */
   function onClickPomodoro(e) {
     //if runningEntry is still pomodoro the button is set to cancel so delete unfinished pomodoros
+    //CANCEL POMODOROS
     if(runningEntry.isPomodoro) {
       setStartingPomodoro(null)
        let fetchToday = entries.filter(function(val,index) {
@@ -179,9 +175,14 @@ function App() {
          }
          return !(val.isPomodoro && val.status !== StatusEnum.COMPLETED)
        })
-       setRunningEntry(fetchToday[0])
+       //and add a appstarted pomodoro again if it hasn't run any yet
+       if(fetchToday.length === 0) {
+         addEntry(initialEntry)
+       }
        setStartingPomodoro(null)
        setEntries(fetchToday)
+       setRunningEntry(entries[0])
+       
     }
     //otherwise open the pomodoro dialog/modal
     else {
@@ -365,7 +366,7 @@ function App() {
     Used by the timer to move from Pomodoro to the next Pomodoro
     Not used in entries that are not pomodoros
   */
-  function checkEntry() {
+  function checkEntry(time) {
     if(isStarted === false || startingPomodoro === null) return
    
     let elapsedTime = new Date() - entries[startingPomodoro].start
@@ -408,9 +409,8 @@ function App() {
         setPomodoro={setPomodoro}
         cancelPomodoro={cancelPomodoro}
       />:<div></div>}
-      <Context.Provider value={DataCache.cache}>
-        <DiaryEntries entries={entries} />
-      </Context.Provider>
+      <DiaryEntries entries={entries} />
+      
     </div>
   
     </div>

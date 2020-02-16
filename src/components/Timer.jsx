@@ -37,7 +37,7 @@ export default function Timer({entry,checkEntry,isRunning}) {
     })
     function tick() {
         setTimer( new Date() )
-        checkEntry()
+        checkEntry(time)
     }
 
     function onToggleHandler(e) {

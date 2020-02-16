@@ -1,5 +1,6 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState} from 'react'
 import '../assets/scss/NotesField.css'
+
 
 export default function NotesField({entry}) {
     const [note,setNote] = useState(entry.note)
@@ -7,7 +8,7 @@ export default function NotesField({entry}) {
         entry.note = e.target.value
         setNote(entry.note)
     }
-    //useEffect(() => {document.getElementById("note").value = Note()})
+    
     return (
         <div className="notes-field">
             

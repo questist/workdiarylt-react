@@ -1,11 +1,7 @@
 import React from 'react'
 import Button from './Button'
-import RatingField from './RatingField'
-import NotesField from './NotesField'
-import TitleField from './TitleField'
 import PomodoroField from './PomodoroField'
 import '../assets/scss/PomodoroDialog.css'
-import { StatusEnum } from './GlobalFunctions';
 
 export default function EntryDialog({cancelPomodoro,setPomodoro}) {
     return (
