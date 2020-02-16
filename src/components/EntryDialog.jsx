@@ -6,7 +6,7 @@ import TitleField from './TitleField'
 import '../assets/scss/EntryDialog.css'
 
 export default function EntryDialog({
-    entry
+    entry,onClickSave
 }) {
     let dialog = ""
     const [titleLine,setDialogTitle] = useState(entry.dialogTitle())
@@ -15,6 +15,7 @@ export default function EntryDialog({
 
         setDialogTitle(entry.dialogTitle())
     }
+
     dialog = (
         <div className="entry-dialog">
             <div>
@@ -25,7 +26,7 @@ export default function EntryDialog({
                     <NotesField entry={entry}/>
                 </div>
                 <div className="button-row">
-                    <Button text="Save"/>
+                    <Button text="Save" onClickHandler={onClickSave}/>
                 </div>
             </div>
         </div>

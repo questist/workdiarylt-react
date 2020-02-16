@@ -47,7 +47,7 @@ export default function RatingField({entry}) {
         let s = id[id.length -1]
         let stars = document.getElementsByClassName("star")
         Array.prototype.forEach.call(stars,function(el,index) {
-            if(index < s && entry.Rating <= index) {
+            if(index < s && entry.rating <= index) {
                 let tokens = el.classList
                 tokens.remove("star-selected")
                 tokens.add("star-unselected")

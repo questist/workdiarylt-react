@@ -21,6 +21,14 @@ export default function DiaryEntries({entries}) {
     }
     const [dialogOptions,setDialog] = useState( initialOptions )
     
+    /*onClickSave Handler 
+    When the save button in the dialog is clicked close which automatically rerenders the list
+    and updates it title
+    */
+    function onClickSave(e) {
+        dialogOptions.clicked()
+        setDialog({...dialogOptions})
+    }
     /*
     function onClickEntry(event,clickedEntry) 
         onClick Handler for when a listing entry is clicked on to toggle the EntryDialog
@@ -55,9 +63,8 @@ export default function DiaryEntries({entries}) {
         //otherwise the dialog is already open so set dialog STATE from the current dialog STATE
         //then clicking it to toggle it's viewing
         else {
-            let newOption = Object.assign({},dialogOptions,{openId:id})
-            newOption.clicked()
-            setDialog(newOption)
+            dialogOptions.clicked()
+            setDialog({...dialogOptions})
         }
         //dialogOptions.clicked()
     }
@@ -70,6 +77,7 @@ export default function DiaryEntries({entries}) {
                 onClickEntry={onClickEntry}
                 isDialogOpen={dialogOptions.isOpen(entry.id)}
                 entry={entry}
+                onClickSave={onClickSave}
             />)
             
             return e

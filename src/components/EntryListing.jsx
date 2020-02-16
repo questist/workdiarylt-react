@@ -4,8 +4,9 @@ import '../assets/scss/EntryDialog.css'
 import EntryDialog from '../components/EntryDialog'
 
 export default function EntryListing({
-    onClickEntry,isDialogOpen,entry
+    onClickEntry,isDialogOpen,onClickSave,entry
 }) {
+
     return (
         <React.Fragment>
             <div 
@@ -17,7 +18,7 @@ export default function EntryListing({
                 <h3>{entry.listingTitle()}</h3>
             </div>
 
-            {isDialogOpen && <EntryDialog entry={entry} />}
+            {isDialogOpen && <EntryDialog entry={entry} onClickSave={onClickSave} />}
         </React.Fragment>
     )
 }
