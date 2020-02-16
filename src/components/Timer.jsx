@@ -2,6 +2,7 @@ import React,{useState, useEffect,useRef} from 'react'
 import TimerDisplay from './TimerDisplay'
 import '../assets/scss/timer.css'
 import alarm from '../assets/audio/alarm.mp3'
+import { StatusEnum } from './GlobalFunctions';
 
 function formatElapsedTime(milliseconds) {
     let time = Math.round(milliseconds/1000)
@@ -29,6 +30,8 @@ function formatElapsedTime(milliseconds) {
 export default function Timer({entry,checkEntry,isRunning}) {
     
     const [time,setTimer] = useState(new Date())
+    const [elapsedTime,setElapsedTime] = useState(null)
+    const [showElapsedTime,setShowElapsedTime] = useState(true)
     let timerID = useRef(null);
     
     useEffect(() => {
@@ -41,8 +44,7 @@ export default function Timer({entry,checkEntry,isRunning}) {
     }
 
     function onToggleHandler(e) {
-        //TODO
-        console.log("onToggleHandler")
+        setShowElapsedTime(!showElapsedTime)
     }
     /*
     const [played,setPlayed] = useState(false)
@@ -52,6 +54,24 @@ export default function Timer({entry,checkEntry,isRunning}) {
         
         setPlayed(true)
     }*/
+    let timerTitle = "Elapsed Time"
+    let timerTime = formatElapsedTime(time - entry.start)
+    let toggle = entry.isPomodoro
+    if(!showElapsedTime && entry.isPomodoro) {
+        timerTitle = "Time Left"
+        if(entry.status === StatusEnum.RUNNING) {
+            let milliseconds = entry.duration + entry.start.getTime() - time.getTime()
+            timerTime = formatElapsedTime(milliseconds)
+            
+        }
+        else if(entry.status === StatusEnum.PAUSED) {
+            let milliseconds = entry.duration + entry.start.getTime() - entry.end.getTime()
+            timerTime = formatElapsedTime(milliseconds)
+        }
+        else if(entry.status === StatusEnum.COMPLETED) {
+            timerTime = "00:00"
+        }
+    }
     return (
         <div className="timer">
             <div>
@@ -62,9 +82,9 @@ export default function Timer({entry,checkEntry,isRunning}) {
             </div>
             <div>
                 <TimerDisplay 
-                    text="Elapsed Time"
-                    time={(!isRunning)?"00:00":formatElapsedTime(time - entry.start)}
-                    toggle={true}
+                    text={timerTitle}
+                    time={(!isRunning && entry.status !== StatusEnum.PAUSED)?"00:00":timerTime}
+                    toggle={toggle}
                     onToggleHandler={onToggleHandler}
                 />
             </div>

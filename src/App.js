@@ -65,13 +65,15 @@ function App() {
     },
     dialogTitle() {
       let titleLine = ""
+      let minutes = Math.ceil(this.duration / 1000 / 60)
       if(!this.isPomodoro || this.status === StatusEnum.COMPLETED) {
-              let forString = (this.status === StatusEnum.COMPLETED)?(" for " + this.duration + " minutes"):""
+              let forString = (this.status === StatusEnum.COMPLETED)?(" for " + minutes + " minutes"):""
               titleLine = "I felt like " + this.title + 
                       " entries at " + this.start.toLocaleTimeString() + forString
       }
       else {
-          titleLine = "I will be " + this.title + " for " + this.duration + " minutes"
+          
+          titleLine = "I will be " + this.title + " for " + minutes + " minutes"
       }
       return titleLine
     },
@@ -89,7 +91,7 @@ function App() {
   const addEntry = (entry) => {
     const newobj = Object.assign({}, initialEntry, entry);
     entries.unshift(newobj)
-    console.log("length: " + entries.length)
+    //console.log("length: " + entries.length)
     setEntries(entries)
   };
   
@@ -159,8 +161,7 @@ function App() {
           }
           
           let milliseconds = new Date(entries[i].end - entries[i].start)
-          let minutes = Math.ceil(milliseconds / 1000 / 60)
-          entries[i].duration  = minutes
+          entries[i].duration  = milliseconds.getTime()
           entries[i].status = StatusEnum.COMPLETED
           continue
          }
@@ -233,7 +234,7 @@ function App() {
           start: "Pomodoro " + i,
           isPomodoro: true,
           status: StatusEnum.NOTSTARTED,
-          duration: duration,
+          duration: duration * 60 * 1000,
         }
         addEntry(tmpEntry)
       }
@@ -247,7 +248,7 @@ function App() {
           start: "Short Break " + shortBreakCount,
           isPomodoro: true,
           status: StatusEnum.NOTSTARTED,
-          duration: shortBreak,
+          duration: shortBreak * 60 * 1000,
         }
         addEntry(tmpEntry)
       }
@@ -262,7 +263,7 @@ function App() {
           start: "Long Break " + longBreakCount,
           isPomodoro: true,
           status: StatusEnum.NOTSTARTED,
-          duration: longBreak,
+          duration: longBreak * 60 * 1000,
         }
         addEntry(tmpEntry)
       }
@@ -299,8 +300,7 @@ function App() {
       start.status = StatusEnum.COMPLETED
       start.end = new Date()
       let milliseconds = new Date(start.end - start.start)
-      let minutes = Math.ceil(milliseconds / 1000 / 60)
-      start.duration  = minutes
+      start.duration  = milliseconds.getTime()
     }
   }
   
@@ -325,7 +325,12 @@ function App() {
       //remember the pomodoros are deleted on day save and on regular new entries which is why this works
       if(entries[0].isPomodoro === true && entries[0].status !== StatusEnum.COMPLETED) {
         let starting = entries[startingPomodoro]
-        if(starting.status === StatusEnum.PAUSED) starting.status = StatusEnum.RUNNING
+        //unpause a pomodoro by resetting it's duration to include the time passed during pause
+        if(starting.status === StatusEnum.PAUSED) {
+          starting.status = StatusEnum.RUNNING
+          let now = new Date()
+          starting.duration = now.getTime() - starting.end.getTime() + starting.duration 
+        }
         else iteratePomodoro(startingPomodoro)
       }
       //otherwise if the app just started start timing the first item
@@ -363,7 +368,7 @@ function App() {
    
     let elapsedTime = new Date() - entries[startingPomodoro].start
     //TODO: Move this some of this into iteratePomodoro
-    if(elapsedTime >= (4000) && startingPomodoro - 1 >= 0) {
+    if(elapsedTime >= (10000) && startingPomodoro - 1 >= 0) {
       entries[startingPomodoro].end = new Date()
       entries[startingPomodoro].status = StatusEnum.COMPLETED
       iteratePomodoro(startingPomodoro - 1)

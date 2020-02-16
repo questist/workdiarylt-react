@@ -6,7 +6,7 @@ import '../assets/scss/TimerDisplay.css'
 export default function TimerDisplay({text,time,toggle,onToggleHandler}) {
     let toggleComponent = ""
     let toggleClass = ""
-    if(toggle !== undefined) {
+    if(toggle === true) {
         toggleComponent = <ToggleIcon onToggleHandler={onToggleHandler}/>
         toggleClass = "toggle"
     }

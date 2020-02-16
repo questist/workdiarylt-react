@@ -12,7 +12,7 @@ const Controls = ({
                 <div>
                 <Button text={(selectedEntry.isPomodoro === true && selectedEntry.status !== StatusEnum.COMPLETED)?"Cancel":"Pomodoro"}
                     onClickHandler={onClickPomodoro} 
-                    style={{marginTop: '10px',marginBottom: '10px',width: '102px'}}
+                    style={{marginTop: '10px',marginBottom: '10px',width: '102px',justifyContent: 'center'}}
                 />
                 <Button 
                     text={(isStarted)?"Pause":"Start"}
