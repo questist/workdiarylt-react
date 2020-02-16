@@ -12,7 +12,7 @@ export default function PomodoroField({text,value,id,min,max}) {
             setFieldValue(min)
         }
         else {
-            setFieldValue(Number.parseInt(e.target.value))
+            setFieldValue(num)
         }
     }
     function onBlurChange(e) {

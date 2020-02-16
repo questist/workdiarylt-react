@@ -7,7 +7,7 @@ import './assets/scss/app.css'
 import ltlogo from './assets/images/logo.png'
 import workimgselected from './assets/images/menu-work-selected.png'
 import diaryimgunselected from './assets/images/menu-diary-unselected.png'
-//import alarm from './assets/audio/alarm.mp3'
+import alarm from './assets/audio/alarm.mp3'
 import {StatusEnum} from './components/GlobalFunctions'
 import Controls from './components/Controls'
 
@@ -329,7 +329,9 @@ function App() {
         if(starting.status === StatusEnum.PAUSED) {
           starting.status = StatusEnum.RUNNING
           let now = new Date()
-          starting.duration = now.getTime() - starting.end.getTime() + starting.duration 
+          
+          starting.duration = now.getTime() - starting.end.getTime() + starting.duration
+          console.log(starting.duration)
         }
         else iteratePomodoro(startingPomodoro)
       }
@@ -363,20 +365,26 @@ function App() {
     Used by the timer to move from Pomodoro to the next Pomodoro
     Not used in entries that are not pomodoros
   */
-  function checkEntry(time) {
+  function checkEntry() {
     if(isStarted === false || startingPomodoro === null) return
    
-    let elapsedTime = new Date() - entries[startingPomodoro].start
+    let elapsedTime = new Date().getTime() - entries[startingPomodoro].start.getTime()
+    //let elapsedTime = new Date() - entries[startingPomodoro].start
     //TODO: Move this some of this into iteratePomodoro
-    if(elapsedTime >= (10000) && startingPomodoro - 1 >= 0) {
-      entries[startingPomodoro].end = new Date()
-      entries[startingPomodoro].status = StatusEnum.COMPLETED
+    let running = entries[startingPomodoro]
+    if(elapsedTime >= running.duration && startingPomodoro - 1 >= 0) {
+      running.end = new Date()
+      
+      let sound = new Audio(alarm)
+      sound.play()
+
+      running.status = StatusEnum.COMPLETED
       iteratePomodoro(startingPomodoro - 1)
 
     }
     else if(startingPomodoro === 0) {
-      entries[startingPomodoro].end = new Date()
-      entries[startingPomodoro].status = StatusEnum.COMPLETED
+      running.end = new Date()
+      running.status = StatusEnum.COMPLETED
       //Set states to stop the app from timing
       setStartingPomodoro(null)
       setStart(false)

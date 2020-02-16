@@ -30,7 +30,6 @@ function formatElapsedTime(milliseconds) {
 export default function Timer({entry,checkEntry,isRunning}) {
     
     const [time,setTimer] = useState(new Date())
-    const [elapsedTime,setElapsedTime] = useState(null)
     const [showElapsedTime,setShowElapsedTime] = useState(true)
     let timerID = useRef(null);
     
