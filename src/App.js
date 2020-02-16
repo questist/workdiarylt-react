@@ -95,16 +95,7 @@ function App() {
   
   
   //handle the onClickHander of the NEXT ENTRY BUTTON by adding the next entry after it
-  function onNewEntry(e) {
-    //delete pomodoros
-    if(entries[0].isPomodoro) {
-       setStartingPomodoro(null)
-       let fetchToday = entries.filter(function(val,index) {
-         return !(val.isPomodoro && val.status !== StatusEnum.COMPLETED)
-       })
-       //entries = fetchToday
-       setEntries(fetchToday)
-    }
+  function onNewEntry() {
 
     const extra = {
       index: entries.length,
@@ -157,30 +148,31 @@ function App() {
   function onClickPomodoro(e) {
     //if runningEntry is still pomodoro the button is set to cancel so delete unfinished pomodoros
     //CANCEL POMODOROS
-    if(runningEntry.isPomodoro) {
+    if(runningEntry.isPomodoro && runningEntry.status !== StatusEnum.COMPLETED) {
       setStartingPomodoro(null)
-       let fetchToday = entries.filter(function(val,index) {
+       for(let i = entries.length - 1;i >= 0;i--) {
          //if a pomodoro is paused complete it now
-         if(val.isPomodoro && (val.status === StatusEnum.PAUSED || val.status === StatusEnum.RUNNING)) {
+         if(entries[i].isPomodoro && (entries[i].status === StatusEnum.PAUSED || entries[i].status === StatusEnum.RUNNING)) {
           //the end date was set when it was paused but not when it was running
-          if(val.status === StatusEnum.RUNNING) {
-            val.end = new Date()
+          if(entries[i].status === StatusEnum.RUNNING) {
+            entries[i].end = new Date()
           }
           
-          let milliseconds = new Date(val.end - val.start)
+          let milliseconds = new Date(entries[i].end - entries[i].start)
           let minutes = Math.ceil(milliseconds / 1000 / 60)
-          val.duration  = minutes
-          val.status = StatusEnum.COMPLETED
-          return true
+          entries[i].duration  = minutes
+          entries[i].status = StatusEnum.COMPLETED
+          continue
          }
-         return !(val.isPomodoro && val.status !== StatusEnum.COMPLETED)
-       })
+         if(entries[i].isPomodoro && entries[i].status !== StatusEnum.COMPLETED) {
+          entries.shift()
+         }
+       }
        //and add a appstarted pomodoro again if it hasn't run any yet
-       if(fetchToday.length === 0) {
-         addEntry(initialEntry)
+       if(entries.length === 0) {
+         addEntry({})
        }
        setStartingPomodoro(null)
-       setEntries(fetchToday)
        setRunningEntry(entries[0])
        
     }
