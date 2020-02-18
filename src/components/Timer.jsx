@@ -1,7 +1,6 @@
 import React,{useState, useEffect,useRef} from 'react'
 import TimerDisplay from './TimerDisplay'
 import '../assets/scss/timer.css'
-import alarm from '../assets/audio/alarm.mp3'
 import { StatusEnum } from './GlobalFunctions';
 
 function formatElapsedTime(milliseconds) {

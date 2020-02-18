@@ -69,7 +69,7 @@ function App() {
       if(!this.isPomodoro || this.status === StatusEnum.COMPLETED) {
               let forString = (this.status === StatusEnum.COMPLETED)?(" for " + minutes + " minutes"):""
               titleLine = "I felt like " + this.title + 
-                      " entries at " + this.start.toLocaleTimeString() + forString
+                      " at " + this.start.toLocaleTimeString() + forString
       }
       else {
           
@@ -401,7 +401,7 @@ function App() {
       </div>
     </div>
     <Controls
-      entries={entries.length}
+      entriesLength={entries.length}
       selectedEntry={runningEntry}
       onClickPomodoro={onClickPomodoro}
       onClickStart={onClickStart}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import '../assets/scss/EntryListing.css'
 import '../assets/scss/EntryDialog.css'
 import EntryDialog from '../components/EntryDialog'
@@ -6,7 +6,7 @@ import EntryDialog from '../components/EntryDialog'
 export default function EntryListing({
     onClickEntry,isDialogOpen,onClickSave,entry
 }) {
-
+    
     return (
         <React.Fragment>
             <div 
