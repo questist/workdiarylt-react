@@ -1,4 +1,5 @@
 import React, { useState} from 'react';
+import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom"
 import logo from './logo.svg';
 import './App.css';
 import DiaryEntries from './components/DiaryEntries'
@@ -392,33 +393,44 @@ function App() {
    
   }
   return (
+    <Router>
     <div className="App">
-    <div className="header" style={{textAlign: 'initial'}}>
-      <img src={ltlogo} />
-      <div className="nav">
-        <img src={workimgselected} />
-        <img src={diaryimgunselected} />
+    
+      <div className="header" style={{textAlign: 'initial'}}>
+        <img src={ltlogo} />
+        <div className="nav">
+          <Link to="/"><img src={workimgselected} /></Link>
+          <Link to="/diary"><img src={diaryimgunselected} /></Link>
+        </div>
       </div>
-    </div>
-    <Controls
-      entriesLength={entries.length}
-      selectedEntry={runningEntry}
-      onClickPomodoro={onClickPomodoro}
-      onClickStart={onClickStart}
-      isStarted={isStarted}
-      checkEntry={checkEntry}
-    />
-    <div className="today-select">
-      {editPomodoro ?
-      <PomodoroDialog 
-        setPomodoro={setPomodoro}
-        cancelPomodoro={cancelPomodoro}
-      />:<div></div>}
-      <DiaryEntries entries={entries} />
-      
-    </div>
+    
+    <Switch>
+      <Route exact path="/">
+        <Controls
+          entriesLength={entries.length}
+          selectedEntry={runningEntry}
+          onClickPomodoro={onClickPomodoro}
+          onClickStart={onClickStart}
+          isStarted={isStarted}
+          checkEntry={checkEntry}
+        />
+        <div className="today-select">
+          {editPomodoro ?
+          <PomodoroDialog 
+            setPomodoro={setPomodoro}
+            cancelPomodoro={cancelPomodoro}
+          />:<div></div>}
+          <DiaryEntries entries={entries} />
+          
+        </div>
+        </Route>
+        <Route path="/diary">
+          <div>Welcome to the diary</div>
+        </Route>
+    </Switch>
   
     </div>
+    </Router>
   );
 }
 
