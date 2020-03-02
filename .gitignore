@@ -6,6 +6,10 @@ server/node_modules
 .pnp
 .pnp.js
 
+#css files built from sass
+client/src/assets/scss/*.css
+client/src/assets/scss/*.css.map
+
 # testing
 client/coverage
 

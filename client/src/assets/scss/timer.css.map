@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,MAAM,CAAC;EACH,UAAU,EAAE,MAAM;CAOrB;;AARD,AAEI,MAFE,GAEA,GAAG,AAAA,cAAc,CAAC;EAChB,YAAY,EAAE,IAAI;CACrB;;AAJL,AAKI,MALE,GAKA,GAAG,CAAC;EACF,OAAO,EAAE,YAAY;CACxB",
-    "sources": [
-        "timer.scss"
-    ],
-    "names": [],
-    "file": "timer.css"
-}
