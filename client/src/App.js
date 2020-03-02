@@ -98,6 +98,9 @@ function App() {
   };
   
   function startQuickEntry(value) {
+    if(isStarted) {
+      stopRunning()
+    }
     const extra = {
       index: entries.length,
       id: entries.length + value.slice(0,5),
@@ -412,8 +415,20 @@ function App() {
   //load the quick selects
   let quickselects = null
   if(!editPomodoro) {
+    let added = []
     quickselects = entries.map((entry) => {
+      
+      //if it's the default entry in the app
       if(entry.title === "Logging my activities") {
+        return undefined
+      }
+      //check that it's the same title as another in the app and if it hasn't been added yet
+      let found = added.findIndex( (value) => value === entry.title )
+    
+      if(found === -1) {
+        added.push(entry.title)
+      }
+      else {
         return undefined
       }
       return <QuickSelect key={entry.id} value={entry.title} startQuickEntry={startQuickEntry} />
@@ -447,7 +462,7 @@ function App() {
           <PomodoroDialog 
             setPomodoro={setPomodoro}
             cancelPomodoro={cancelPomodoro}
-          />:<div>{quickselects}</div>}
+          />:<div className="quick-selects-section">{quickselects}</div>}
           <DiaryEntries entries={entries} />
           
         </div>
