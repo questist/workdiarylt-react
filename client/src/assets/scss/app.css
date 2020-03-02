@@ -24,6 +24,13 @@
 }
 
 .quick-selects-section {
+  padding: 20px 30px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.quick-selects-section > div {
+  margin: 10px 0;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -33,7 +40,7 @@
       align-content: flex-start;
 }
 
-.quick-selects-section > .quick-select {
+.quick-selects-section > div > .quick-select {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -46,7 +53,7 @@
   width: fit-content;
   height: 40px;
   border-radius: 6px;
-  margin: 10px;
+  margin: 10px 10px 10px 0;
   padding: 0 25px;
   font-weight: bold;
   -webkit-transition: .5s ease-in;
@@ -54,7 +61,7 @@
   cursor: pointer;
 }
 
-.quick-selects-section > .quick-select:hover {
+.quick-selects-section > div > .quick-select:hover {
   background-color: #c20101;
 }
 

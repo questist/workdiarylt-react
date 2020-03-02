@@ -16,24 +16,30 @@
 }
 
 .quick-selects-section {
-    display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    > .quick-select {
+    padding: 20px 30px;
+    box-sizing: border-box;
+    > div {
+        margin: 10px 0;
         display: flex;
-        align-items: center;
-        background-color: $light-bg-color;
-        width: fit-content;
-        height: 40px;
-        border-radius: 6px;
-        margin: 10px;
-        padding: 0 25px;
-        font-weight: bold;
-        transition: .5s ease-in;
-        cursor: pointer;
-    }
-    > .quick-select:hover {
-        background-color: $dark-bg-color;
+        flex-wrap: wrap;
+        align-content: flex-start;
+
+        > .quick-select {
+            display: flex;
+            align-items: center;
+            background-color: $light-bg-color;
+            width: fit-content;
+            height: 40px;
+            border-radius: 6px;
+            margin: 10px 10px 10px 0;
+            padding: 0 25px;
+            font-weight: bold;
+            transition: .5s ease-in;
+            cursor: pointer;
+        }
+        > .quick-select:hover {
+            background-color: $dark-bg-color;
+        }
     }
 }
 .work-toolbar {

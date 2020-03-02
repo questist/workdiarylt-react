@@ -462,7 +462,7 @@ function App() {
           <PomodoroDialog 
             setPomodoro={setPomodoro}
             cancelPomodoro={cancelPomodoro}
-          />:<div className="quick-selects-section">{quickselects}</div>}
+          />:<div className="quick-selects-section">Quick Start an Entry...<div>{quickselects}</div></div>}
           <DiaryEntries entries={entries} />
           
         </div>
