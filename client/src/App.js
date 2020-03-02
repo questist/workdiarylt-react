@@ -97,7 +97,23 @@ function App() {
     setEntries(entries)
   };
   
-  
+  function startQuickEntry(value) {
+    const extra = {
+      index: entries.length,
+      id: entries.length + value.slice(0,5),
+      title: value,
+      status: StatusEnum.RUNNING,
+      start: new Date()
+    }
+    
+
+    addEntry(extra)
+    setRunningEntry(entries[0])
+    
+    if(isStarted === false) {
+      setStart(true)
+    }
+  }
   //handle the onClickHander of the NEXT ENTRY BUTTON by adding the next entry after it
   function onNewEntry() {
 
@@ -108,7 +124,6 @@ function App() {
       status: StatusEnum.RUNNING,
       start: new Date()
     }
-
     
 
     addEntry(extra)
@@ -393,6 +408,18 @@ function App() {
     }
    
   }
+
+  //load the quick selects
+  let quickselects = null
+  if(!editPomodoro) {
+    quickselects = entries.map((entry) => {
+      if(entry.title === "Logging my activities") {
+        return undefined
+      }
+      return <QuickSelect key={entry.id} value={entry.title} startQuickEntry={startQuickEntry} />
+    })
+    console.log(quickselects.length);
+  }
   return (
     <Router>
     <div className="App">
@@ -420,7 +447,7 @@ function App() {
           <PomodoroDialog 
             setPomodoro={setPomodoro}
             cancelPomodoro={cancelPomodoro}
-          />:<div></div>}
+          />:<div>{quickselects}</div>}
           <DiaryEntries entries={entries} />
           
         </div>
