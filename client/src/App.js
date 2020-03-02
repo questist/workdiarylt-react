@@ -2,6 +2,7 @@ import React, { useState} from 'react';
 import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom"
 import logo from './logo.svg';
 import './App.css';
+import QuickSelect from './components/QuickSelect'
 import DiaryEntries from './components/DiaryEntries'
 import PomodoroDialog from './components/PomodoroDialog'
 import './assets/scss/app.css'
