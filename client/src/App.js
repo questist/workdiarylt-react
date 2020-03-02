@@ -433,7 +433,7 @@ function App() {
       }
       return <QuickSelect key={entry.id} value={entry.title} startQuickEntry={startQuickEntry} />
     })
-    console.log(quickselects.length);
+    quickselects = quickselects.filter((value) => value !== undefined)
   }
   return (
     <Router>
@@ -462,7 +462,7 @@ function App() {
           <PomodoroDialog 
             setPomodoro={setPomodoro}
             cancelPomodoro={cancelPomodoro}
-          />:<div className="quick-selects-section">Quick Start an Entry...<div>{quickselects}</div></div>}
+          />:<div className="quick-selects-section">{(quickselects.length > 0)? "Quick Start an Entry...":""}<div>{quickselects}</div></div>}
           <DiaryEntries entries={entries} />
           
         </div>
