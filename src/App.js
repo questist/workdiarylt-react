@@ -101,6 +101,9 @@ function App() {
     if(isStarted) {
       stopRunning()
     }
+    if(entries[0].isPomodoro) {
+      onClickPomodoro()
+    }
     const extra = {
       index: entries.length,
       id: entries.length + value.slice(0,5),
@@ -113,9 +116,8 @@ function App() {
     addEntry(extra)
     setRunningEntry(entries[0])
     
-    if(isStarted === false) {
-      setStart(true)
-    }
+    
+    setStart(true)
   }
   //handle the onClickHander of the NEXT ENTRY BUTTON by adding the next entry after it
   function onNewEntry() {
@@ -195,7 +197,7 @@ function App() {
        }
        setStartingPomodoro(null)
        setRunningEntry(entries[0])
-       
+       setStart(false)
     }
     //otherwise open the pomodoro dialog/modal
     else {
