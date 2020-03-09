@@ -419,7 +419,7 @@ function App() {
     quickselects = entries.map((entry) => {
       
       //if it's the default entry in the app
-      if(entry.title === "Logging my activities") {
+      if(entry.title === "Logging my activities" || entry.title.indexOf("Pomodoro") !== -1) {
         return undefined
       }
       //check that it's the same title as another in the app and if it hasn't been added yet
