@@ -1,6 +1,8 @@
 import React, { useState} from 'react';
+import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom"
 import logo from './logo.svg';
 import './App.css';
+import QuickSelect from './components/QuickSelect'
 import DiaryEntries from './components/DiaryEntries'
 import PomodoroDialog from './components/PomodoroDialog'
 import './assets/scss/app.css'
@@ -10,7 +12,7 @@ import diaryimgunselected from './assets/images/menu-diary-unselected.png'
 import alarm from './assets/audio/alarm.mp3'
 import {StatusEnum} from './components/GlobalFunctions'
 import Controls from './components/Controls'
-
+import Diary from './components/diary-screen/Diary'
 
 
 function App() {
@@ -95,7 +97,28 @@ function App() {
     setEntries(entries)
   };
   
-  
+  function startQuickEntry(value) {
+    if(isStarted) {
+      stopRunning()
+    }
+    if(entries[0].isPomodoro) {
+      onClickPomodoro()
+    }
+    const extra = {
+      index: entries.length,
+      id: entries.length + value.slice(0,5),
+      title: value,
+      status: StatusEnum.RUNNING,
+      start: new Date()
+    }
+    
+
+    addEntry(extra)
+    setRunningEntry(entries[0])
+    
+    
+    setStart(true)
+  }
   //handle the onClickHander of the NEXT ENTRY BUTTON by adding the next entry after it
   function onNewEntry() {
 
@@ -106,7 +129,6 @@ function App() {
       status: StatusEnum.RUNNING,
       start: new Date()
     }
-
     
 
     addEntry(extra)
@@ -175,7 +197,7 @@ function App() {
        }
        setStartingPomodoro(null)
        setRunningEntry(entries[0])
-       
+       setStart(false)
     }
     //otherwise open the pomodoro dialog/modal
     else {
@@ -391,34 +413,69 @@ function App() {
     }
    
   }
-  return (
-    <div className="App">
-    <div className="header" style={{textAlign: 'initial'}}>
-      <img src={ltlogo} />
-      <div className="nav">
-        <img src={workimgselected} />
-        <img src={diaryimgunselected} />
-      </div>
-    </div>
-    <Controls
-      entriesLength={entries.length}
-      selectedEntry={runningEntry}
-      onClickPomodoro={onClickPomodoro}
-      onClickStart={onClickStart}
-      isStarted={isStarted}
-      checkEntry={checkEntry}
-    />
-    <div className="today-select">
-      {editPomodoro ?
-      <PomodoroDialog 
-        setPomodoro={setPomodoro}
-        cancelPomodoro={cancelPomodoro}
-      />:<div></div>}
-      <DiaryEntries entries={entries} />
+
+  //load the quick selects
+  let quickselects = null
+  if(!editPomodoro) {
+    let added = []
+    quickselects = entries.map((entry) => {
       
-    </div>
+      //if it's the default entry in the app
+      if(entry.title === "Logging my activities" || entry.title.indexOf("Pomodoro") !== -1) {
+        return undefined
+      }
+      //check that it's the same title as another in the app and if it hasn't been added yet
+      let found = added.findIndex( (value) => value === entry.title )
+    
+      if(found === -1) {
+        added.push(entry.title)
+      }
+      else {
+        return undefined
+      }
+      return <QuickSelect key={entry.id} value={entry.title} startQuickEntry={startQuickEntry} />
+    })
+    quickselects = quickselects.filter((value) => value !== undefined)
+  }
+  return (
+    <Router>
+    <div className="App">
+    
+      <div className="header" style={{textAlign: 'initial'}}>
+        <img src={ltlogo} />
+        <div className="nav">
+          <Link to="/"><img src={workimgselected} /></Link>
+          <Link to="/diary"><img src={diaryimgunselected} /></Link>
+        </div>
+      </div>
+    
+    <Switch>
+      <Route exact path="/">
+        <Controls
+          entriesLength={entries.length}
+          selectedEntry={runningEntry}
+          onClickPomodoro={onClickPomodoro}
+          onClickStart={onClickStart}
+          isStarted={isStarted}
+          checkEntry={checkEntry}
+        />
+        <div className="today-select">
+          {editPomodoro ?
+          <PomodoroDialog 
+            setPomodoro={setPomodoro}
+            cancelPomodoro={cancelPomodoro}
+          />:<div className="quick-selects-section">{(quickselects.length > 0)? "Quick Start an Entry...":""}<div>{quickselects}</div></div>}
+          <DiaryEntries entries={entries} />
+          
+        </div>
+        </Route>
+        <Route path="/diary">
+          <Diary />
+        </Route>
+    </Switch>
   
     </div>
+    </Router>
   );
 }
 
