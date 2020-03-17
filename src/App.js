@@ -12,7 +12,7 @@ import diaryimgunselected from './assets/images/menu-diary-unselected.png'
 import alarm from './assets/audio/alarm.mp3'
 import {StatusEnum} from './components/GlobalFunctions'
 import Controls from './components/Controls'
-
+import Diary from './components/diary-screen/Diary'
 
 
 function App() {
@@ -470,7 +470,7 @@ function App() {
         </div>
         </Route>
         <Route path="/diary">
-          <div>Welcome to the diary</div>
+          <Diary />
         </Route>
     </Switch>
   
