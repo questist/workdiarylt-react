@@ -90,6 +90,7 @@ function App() {
   const [editPomodoro,setEditPomodoro] = useState(false)
  
 
+  
   const addEntry = (entry) => {
     const newobj = Object.assign({}, initialEntry, entry);
     entries.unshift(newobj)

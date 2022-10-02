@@ -1,6 +1,9 @@
 import React from 'react'
 import {StatusEnum} from '../GlobalFunctions'
 import DiaryEntries from '../DiaryEntries'
+import Calendar from './Calendar'
+import '../../Utility'
+
 
 export default function Diary() {
     var initialEntry = {
@@ -63,10 +66,20 @@ export default function Diary() {
           return titleLine
         },
       }
+
+
+      //const [currentDay, setCurrentDay] = useState(null)
+      
+      
     return (
         <div><div>"Welcome to the Diary"</div>
             <div className="today-select">
-            <div className="quick-selects-section">"Quick Start an Entry..."<div><div>Test</div></div></div>
+            <div className="quick-selects-section">
+                <Calendar
+                    
+                />
+            
+            </div>
             <DiaryEntries entries={[initialEntry]}/>
             </div>
         </div>
