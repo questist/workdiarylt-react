@@ -1,14 +1,6 @@
-//import React,{createContext} from 'react'
-import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 export default function Globals() {
     console.log("Work Diary LT, Ver .1 Beta")
 }
-
-
-const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  uri: "blank"
-});
 
 let StatusEnum = {
     RUNNING: 1,
