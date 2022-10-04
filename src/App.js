@@ -12,8 +12,10 @@ import diaryimgunselected from './assets/images/menu-diary-unselected.png'
 import alarm from './assets/audio/alarm.mp3'
 import {StatusEnum} from './components/GlobalFunctions'
 import Controls from './components/Controls'
+import Calendar from './components/diary-screen/Calendar'
 import Diary from './components/diary-screen/Diary'
-
+import { storedEntries } from './Utility';
+import DiaryControls from './components/diary-screen/DiaryControls'
 
 function App() {
 
@@ -438,6 +440,24 @@ function App() {
     })
     quickselects = quickselects.filter((value) => value !== undefined)
   }
+
+  function onClickSave() {
+    alert("Save Clicked")
+  }
+  /****************** Diary Screen Function *******************/
+  
+
+  
+  const [diaryDay,setDiaryDay] = useState(storedEntries["2022-10-03"])
+
+  function onClickToggle() {
+    alert("Toggle clicked")
+  }
+
+  function onClickLoad() {
+    alert("Load Clicked")
+  }
+
   return (
     <Router>
     <div className="App">
@@ -457,6 +477,7 @@ function App() {
           selectedEntry={runningEntry}
           onClickPomodoro={onClickPomodoro}
           onClickStart={onClickStart}
+          onClickSave={onClickSave}
           isStarted={isStarted}
           checkEntry={checkEntry}
         />
@@ -471,7 +492,22 @@ function App() {
         </div>
         </Route>
         <Route path="/diary">
-          <Diary />
+        <div>
+          <DiaryControls 
+            entriesLength={diaryDay.length}
+            onClickToggle={onClickToggle}
+            onClickLoad={onClickLoad}
+          />
+            <div className="today-select">
+            <div className="quick-selects-section">
+                <Calendar
+                    storedEntries = {storedEntries} setDiaryDay = {setDiaryDay}
+                />
+            
+            </div>
+            <DiaryEntries entries={diaryDay}/>
+            </div>
+        </div>
         </Route>
     </Switch>
   

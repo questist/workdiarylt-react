@@ -142,7 +142,9 @@ function getStoredEntries() {
                 tmpentries = JSON.parse(tmpentries)
                 tmpentries.forEach( (e,i) => {
                     console.log(tmpentries[i])
-                    tmpentries[i] = Object.assign({},initialEntry, tmpentries[i]) 
+                    tmpentries[i] = Object.assign({},initialEntry, tmpentries[i])
+                    tmpentries[i].start = new Date(tmpentries[i].start)
+                    tmpentries[i].end = new Date(tmpentries[i].end) 
                 })
                 storedentries[localdates[index]] = tmpentries
                 
@@ -161,5 +163,5 @@ function getStoredEntries() {
     return false
     
 }
-
-export {getStoredEntries,addDummyData}
+let storedEntries = getStoredEntries()
+export {storedEntries, addDummyData}
