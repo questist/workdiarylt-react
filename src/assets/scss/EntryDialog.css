@@ -1,0 +1,29 @@
+/* Global Variables for colors fonts etc */
+.entry-dialog {
+  /*
+  width: 50%;
+
+  display: inline-block;
+  left: 0;*/
+  position: relative;
+  height: -moz-fit-content;
+  height: fit-content;
+  text-align: left;
+  background-color: #ff0000;
+  box-sizing: border-box;
+  border-bottom: 2px solid white;
+}
+.entry-dialog > div {
+  background-color: #d1d2e9;
+  border: 3px solid white;
+  margin: 10px;
+  padding: 10px;
+}
+.entry-dialog > div .button-row {
+  display: flex;
+}
+.entry-dialog > div .data-section {
+  border: 1px solid black;
+  border-radius: 6px;
+  padding: 15px;
+}/*# sourceMappingURL=EntryDialog.css.map */

@@ -1,0 +1,31 @@
+/* Global Variables for colors fonts etc */
+.entry-listing {
+  border-bottom: #fff;
+  height: 40px;
+  align-items: center;
+  display: flex;
+  cursor: pointer;
+  box-sizing: border-box;
+  border-bottom: 2px solid white;
+}
+.entry-listing h3 {
+  margin: 0;
+  margin-left: 20px;
+}
+
+.entry-unselected {
+  transition: 0.2s linear;
+  background-color: #ff0000;
+}
+
+.entry-unselected:hover {
+  background-color: #d1d2e9;
+}
+
+.entry-selected {
+  background-color: #595daf;
+}
+
+.entry-pomodoro {
+  background-color: lightgray;
+}/*# sourceMappingURL=EntryListing.css.map */
