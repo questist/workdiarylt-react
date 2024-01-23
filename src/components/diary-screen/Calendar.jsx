@@ -1,8 +1,9 @@
 import React from 'react'
+import {useState} from 'react'
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from '@fullcalendar/interaction'
-import {getStoredEntries} from '../../Utility'
+import {getStoredEntries, loadDataFromFile} from '../../Utility'
 
 export default function Calendar(props) {
   let ev = []
@@ -12,7 +13,51 @@ export default function Calendar(props) {
       date: prop
     })
   }
- 
+  
+  function handleDateClick(arg) { // bind with an arrow function
+    let l = localStorage.getItem("wdlt_dates")
+    l = JSON.parse(l)
+    if(l.find( e => e === arg.dateStr) !== undefined) {
+    
+      props.setDiaryEntries(props.storedEntries[arg.dateStr])
+      props.setDiaryDay(props.setDiaryDay[arg.dateStr])
+      setDiaryDay(arg.dateStr)
+    }
+    else {
+      let newDiaryDay = props.diaryDay
+      let key
+      for(key in props.storedEntries) {
+        if(key !== props.diaryDay) {
+          newDiaryDay = key
+      }
+    }
+      setDiaryDay(newDiaryDay)
+      props.setDiaryEntries(props.storedEntries[newDiaryDay])
+    }
+  }
+
+  /*
+  props.handleLoad = function() {
+    loadDataFromFile()
+    let newDiaryDay = props.diaryDay
+    let key
+    for(key in props.storedEntries) {
+      if(key !== props.diaryDay) {
+        newDiaryDay = key
+      }
+    }
+    props.setDiaryEntries(props.storedEntries[key])
+    props.setDiaryDay(newDiaryDay)
+  }
+  */
+  const [refresh,setRefresh] = useState({})
+  const [diaryDay, setDiaryDay] = useState("")
+  function r() {
+    let d = new Date().toString()
+    // re-renders the component
+    setRefresh({d})
+  };
+  
     return (
       <FullCalendar
         plugins={[ dayGridPlugin, interactionPlugin ]}
@@ -21,10 +66,7 @@ export default function Calendar(props) {
       />
     )
   
-
-  function handleDateClick(arg) { // bind with an arrow function
-    props.setDiaryDay(props.storedEntries[arg.dateStr])
-  }
+  
 /*
   constructor(props) {
     super()

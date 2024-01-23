@@ -14,8 +14,9 @@ import {StatusEnum} from './components/GlobalFunctions'
 import Controls from './components/Controls'
 import Calendar from './components/diary-screen/Calendar'
 import Diary from './components/diary-screen/Diary'
-import { storedEntries } from './Utility';
+import { getDate, loadDataFromFile,saveDataToFile, storedEntries } from './Utility';
 import DiaryControls from './components/diary-screen/DiaryControls'
+import { getDateMeta } from '@fullcalendar/react';
 
 function App() {
 
@@ -442,20 +443,34 @@ function App() {
   }
 
   function onClickSave() {
-    alert("Save Clicked")
+    console.log("entries: " + JSON.stringify(entries))
+    storedEntries[getDate()] = entries
+    saveDataToFile()
   }
   /****************** Diary Screen Function *******************/
   
 
   
-  const [diaryDay,setDiaryDay] = useState(storedEntries["2022-10-03"])
-
+  const [diaryEntries,setDiaryEntries] = useState(storedEntries["2022-10-03"])
+  const [diaryDay,setDiaryDay] = useState("2022-10-03")
+  
   function onClickToggle() {
     alert("Toggle clicked")
   }
 
+
   function onClickLoad() {
-    alert("Load Clicked")
+    
+    loadDataFromFile()
+    let newDiaryDay = diaryDay
+    let key
+    for(key in storedEntries) {
+      if(key !== diaryDay) {
+        newDiaryDay = key
+      }
+    }
+    setDiaryEntries(storedEntries[key])
+    setDiaryDay(diaryDay)
   }
 
   return (
@@ -472,6 +487,7 @@ function App() {
     
     <Switch>
       <Route exact path="/">
+
         <Controls
           entriesLength={entries.length}
           selectedEntry={runningEntry}
@@ -494,18 +510,18 @@ function App() {
         <Route path="/diary">
         <div>
           <DiaryControls 
-            entriesLength={diaryDay.length}
+            entriesLength={diaryEntries.length}
             onClickToggle={onClickToggle}
             onClickLoad={onClickLoad}
           />
             <div className="today-select">
             <div className="quick-selects-section">
                 <Calendar
-                    storedEntries = {storedEntries} setDiaryDay = {setDiaryDay}
+                    handleLoad={onClickLoad} storedEntries = {storedEntries} setDiaryDay = {setDiaryDay} setDiaryEntries = {setDiaryEntries}
                 />
             
             </div>
-            <DiaryEntries entries={diaryDay}/>
+            <DiaryEntries entries={diaryEntries}/>
             </div>
         </div>
         </Route>
