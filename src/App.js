@@ -420,7 +420,7 @@ function App() {
     }
     if(location.pathname === '/diary') {
       console.log("here")
-      //onClickSave()
+      saveTodaysEntries(entries)
     }
   }, [location.pathname]); 
   return (

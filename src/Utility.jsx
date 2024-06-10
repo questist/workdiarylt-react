@@ -68,32 +68,44 @@ function saveTodaysEntries(entries) {
     //error checking upon load and ability to fix a corrupted wdlt storage exist
     let dates = [];
     let todaysdate = getDate();
-    let success = false;
-    let localdates = localStorage.getItem("wdlt_dates");
-    if(localdates === null) {
-        dates = [getDate()];
-    } else {
-        try {
-            localdates = JSON.parse(localdates);
-            if(Array.isArray(localdates) === false) {
-                throw new Error("JSON Parse Error - should have returned an array");
-            }
-            success = true;
-            localdates = localdates.push(todaysdate);  
+    let success = true;
+    //let localdates = localStorage.getItem("wdlt_dates");
+    
+    // if(localdates === null) {
+    //     dates = [getDate()];
+    // } else {
+    //     try {
+    //         localdates = JSON.parse(localdates);
+    //         if(Array.isArray(localdates) === false) {
+    //             throw new Error("JSON Parse Error - should have returned an array");
+    //         }
+    //         success = true;
+    //         localdates = localdates.push(todaysdate);  
             
-        }
-        catch (e) {
-            console.log("Utility.jsx; saveTodaysEntries()")
-            console.log("Error of Type: " + e);
-            console.log(e.name + ": " + e.message);
-            //TODO: See if we can recover dates from file or from the full entries obj in local storage
-        }
-    }    
+    //     }
+    //     catch (e) {
+    //         console.log("Utility.jsx; saveTodaysEntries()")
+    //         console.log("Error of Type: " + e);
+    //         console.log(e.name + ": " + e.message);
+    //         //TODO: See if we can recover dates from file or from the full entries obj in local storage
+    //     }
+    // }    
     
 
     if(typeof(Storage) !== undefined && success === true) {
-      localStorage.setItem("wdlt_" + getDate(),JSON.stringify(entries));
-      localStorage.setItem("wdlt_dates",localdates)
+        let today = getDate()
+      localStorage.setItem("wdlt_" + today,JSON.stringify(entries));
+      let dates = localStorage.getItem("wdlt_dates")
+      if(dates) {
+        dates = JSON.parse(dates)
+        if(dates.indexOf(today) === -1) {
+            dates.push(today)
+            localStorage.setItem("wdlt_dates",JSON.stringify(dates))
+          }
+      }
+      else {
+        localStorage.setItem("wdlt_dates",JSON.stringify([today]))
+      }
     }
     else {
         console.log("Error: Could not write dates")
