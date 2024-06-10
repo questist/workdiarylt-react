@@ -8,8 +8,8 @@ server/node_modules
 .pnp.js
 
 #css files built from sass
-src/assets/scss/*.css
-src/assets/scss/*.css.map
+#src/assets/scss/*.css
+#src/assets/scss/*.css.map
 
 # testing
 coverage

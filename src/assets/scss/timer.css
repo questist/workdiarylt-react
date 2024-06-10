@@ -1,0 +1,9 @@
+.timer {
+  align-self: center;
+}
+.timer > div:first-of-type {
+  margin-right: 25px;
+}
+.timer > div {
+  display: inline-block;
+}/*# sourceMappingURL=timer.css.map */
