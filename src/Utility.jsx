@@ -249,10 +249,10 @@ async function loadDataFromFile() {
     data[currentdate].push(tmp)
   }
   localStorage.setItem("wdlt_dates",JSON.stringify(localdates))
-  console.log(localStorage.getItem("wdlt_dates"))
+
   for(let i = 0; i < localdates.length; i++) {
     localStorage.setItem("wdlt_" + localdates[i], JSON.stringify(data[localdates[i]]))
-    console.log(localStorage.getItem("wdlt_" + localdates[i]))
+
   }
   storedEntries = data
 }
@@ -274,7 +274,7 @@ function formatDataToCSV(data) {
     //const json2csvParser = new Parser();
     //const csv = json2csvParser.parse(csvtowrite);
 
-    console.log("csvtowrite: " + JSON.stringify(csvtowrite));
+    //console.log("csvtowrite: " + JSON.stringify(csvtowrite));
 
     return csvtowrite
 }

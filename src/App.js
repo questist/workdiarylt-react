@@ -1,6 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom"
-import logo from './logo.svg';
+import { BrowserRouter as Router, Switch, Route, Link, useLocation} from "react-router-dom"
 import './App.css';
 import QuickSelect from './components/QuickSelect'
 import DiaryEntries from './components/DiaryEntries'
@@ -13,10 +12,8 @@ import alarm from './assets/audio/alarm.mp3'
 import {StatusEnum, initialDiaryEntry} from './components/GlobalFunctions'
 import Controls from './components/Controls'
 import Calendar from './components/diary-screen/Calendar'
-import Diary from './components/diary-screen/Diary'
 import { getDate, loadDataFromFile,saveDataToFile, storedEntries, getTodaysSavedEntries } from './Utility';
 import DiaryControls from './components/diary-screen/DiaryControls'
-import { getDateMeta } from '@fullcalendar/react';
 import { initialEntry } from './components/GlobalFunctions';
 
 function App() {
@@ -396,7 +393,7 @@ function App() {
 
   
   const [diaryEntries,setDiaryEntries] = useState([initialDiaryEntry])
-  const [diaryDay,setDiaryDay] = useState("2022-10-03")
+  //const [diaryDay,setDiaryDay] = useState("2022-10-03")
   
   function onClickToggle() {
     alert("Toggle clicked")
@@ -411,11 +408,18 @@ function App() {
     const keys = Object.keys(storedEntries)
     const day = keys[keys.length-1]
     setDiaryEntries(storedEntries[day])
-    setDiaryDay(day)
+    //setDiaryDay(day)
   }
 
+  const location = useLocation();
+
+  useEffect(() => {
+   
+    if (location.pathname === '/') {
+      setEntries(getTodaysSavedEntries())
+    }
+  }, [location.pathname]); 
   return (
-    <Router>
     <div className="App">
     
       <div className="header" style={{textAlign: 'initial'}}>
@@ -458,7 +462,7 @@ function App() {
             <div className="today-select">
             <div className="quick-selects-section">
                 <Calendar
-                    handleLoad={onClickLoad} storedEntries = {storedEntries} setDiaryDay = {setDiaryDay} setDiaryEntries = {setDiaryEntries}
+                    handleLoad={onClickLoad} storedEntries = {storedEntries}  setDiaryEntries = {setDiaryEntries}
                 />
             
             </div>
@@ -469,8 +473,7 @@ function App() {
     </Switch>
   
     </div>
-    </Router>
-  );
+  )
 }
 
 export default App;

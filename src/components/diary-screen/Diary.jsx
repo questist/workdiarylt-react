@@ -1,5 +1,4 @@
 import React from 'react'
-import {StatusEnum} from '../GlobalFunctions'
 import DiaryEntries from '../DiaryEntries'
 import Calendar from './Calendar'
 import '../../Utility'
