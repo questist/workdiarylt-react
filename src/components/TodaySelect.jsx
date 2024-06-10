@@ -74,7 +74,6 @@ export default function TodaySelect() {
             else throw Error("No matching entry selected: onClickEntry() Handler")
         }
         
-        console.log("here");
     }
     return (
         <div className="today-select">

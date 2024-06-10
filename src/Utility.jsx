@@ -44,9 +44,7 @@ function addDummyData() {
 
             timestamp = timestamp + (105 * 1000)
             let date = new Date(timestamp);
-            console.log(date); // 👉️ Thu Jan 20 2022 09:48:00
 
-            console.log(date.toString()); // 👉️ "Thu Jan 20 2022 09:48:00"
             ine.start = date
             timestamp = timestamp + (numratingarr[i] * 75 * 1000)
             date = new Date(timestamp);
@@ -55,7 +53,7 @@ function addDummyData() {
             const newobj = Object.assign({}, ine);
             tmpentries.unshift(newobj)
         }
-        console.log(JSON.stringify(tmpentries))
+
         localStorage.setItem("wdlt_" + setdates[index],JSON.stringify(tmpentries))
     })
     localStorage.setItem("wdlt_dates",JSON.stringify(setdates))
@@ -132,16 +130,16 @@ function getStoredEntries() {
     }
     
     if(success == true) {
-        console.log("success")
+
         success = false
         let storedentries = {}
         for( let index = 0; index < localdates.length; index++) {
             try {
-                console.log("success" + index)
+       
                 let tmpentries = localStorage.getItem("wdlt_" + localdates[index])
                 tmpentries = JSON.parse(tmpentries)
                 tmpentries.forEach( (e,i) => {
-                    console.log(tmpentries[i])
+         
                     tmpentries[i] = Object.assign({},initialEntry, tmpentries[i])
                     tmpentries[i].start = new Date(tmpentries[i].start)
                     tmpentries[i].end = new Date(tmpentries[i].end) 
@@ -191,9 +189,9 @@ async function saveDataToFile() {
   }
   const file = await fileStream3.getFile();
   const content = await file.text();
-  console.log(content);
+
   const writable = await fileStream3.createWritable();
-  const date = new Date()
+
   let jsondata = formatDataToCSV(storedEntries)
   jsondata = JSON.stringify(jsondata)
   await writable.write(new Blob([jsondata], {type: "text/plain"}));
@@ -240,8 +238,6 @@ async function loadDataFromFile() {
     console.log(localStorage.getItem("wdlt_" + localdates[i]))
   }
   storedEntries = data
-  console.log("Load data")
-  console.log(storedEntries);
 }
 
 function formatDataToCSV(data) {
