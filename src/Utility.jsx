@@ -23,7 +23,7 @@ function addDummyData() {
     let numratingarr = [3,1,2,3,3,2,1,1,2,4]
     numdailyact.forEach( (e,index) => {
         let tmpentries = [];
-        console.log(index)
+
         let timestamp = new Date().getTime();
         for(let i = 0; i < numdailyact[index]; i++) {
             let ine = {
@@ -41,7 +41,7 @@ function addDummyData() {
             ine.title = ine.title + "(" + index + ")" + setdates[index]; 
             ine.rating = numratingarr[i]
             ine.id = i + setdates[index] + ine.id
-            console.log(timestamp); // 👉️ 1642664853302
+
             timestamp = timestamp + (105 * 1000)
             let date = new Date(timestamp);
             console.log(date); // 👉️ Thu Jan 20 2022 09:48:00
@@ -240,7 +240,8 @@ async function loadDataFromFile() {
     console.log(localStorage.getItem("wdlt_" + localdates[i]))
   }
   storedEntries = data
-  console.log(data);
+  console.log("Load data")
+  console.log(storedEntries);
 }
 
 function formatDataToCSV(data) {

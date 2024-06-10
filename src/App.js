@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom"
 import logo from './logo.svg';
 import './App.css';
@@ -97,7 +97,7 @@ function App() {
   const addEntry = (entry) => {
     const newobj = Object.assign({}, initialEntry, entry);
     entries.unshift(newobj)
-    //console.log("length: " + entries.length)
+
     setEntries(entries)
   };
   
@@ -357,7 +357,6 @@ function App() {
           let now = new Date()
           
           starting.duration = now.getTime() - starting.end.getTime() + starting.duration
-          console.log(starting.duration)
         }
         else iteratePomodoro(startingPomodoro)
       }
@@ -443,7 +442,6 @@ function App() {
   }
 
   function onClickSave() {
-    console.log("entries: " + JSON.stringify(entries))
     storedEntries[getDate()] = entries
     saveDataToFile()
   }
@@ -459,18 +457,15 @@ function App() {
   }
 
 
-  function onClickLoad() {
+  async function onClickLoad() {
     
-    loadDataFromFile()
-    let newDiaryDay = diaryDay
-    let key
-    for(key in storedEntries) {
-      if(key !== diaryDay) {
-        newDiaryDay = key
-      }
-    }
-    setDiaryEntries(storedEntries[key])
-    setDiaryDay(diaryDay)
+    await loadDataFromFile()
+
+
+    const keys = Object.keys(storedEntries)
+    const day = keys[keys.length-1]
+    setDiaryEntries(storedEntries[day])
+    setDiaryDay(day)
   }
 
   return (
@@ -510,7 +505,7 @@ function App() {
         <Route path="/diary">
         <div>
           <DiaryControls 
-            entriesLength={diaryEntries.length}
+            entriesLength={diaryEntries?.length}
             onClickToggle={onClickToggle}
             onClickLoad={onClickLoad}
           />

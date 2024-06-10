@@ -14,16 +14,20 @@ export default function Calendar(props) {
     })
   }
   
+  const [currentDate, setCurrentDate] = useState(null)
   function handleDateClick(arg) { // bind with an arrow function
     let l = localStorage.getItem("wdlt_dates")
     l = JSON.parse(l)
     if(l.find( e => e === arg.dateStr) !== undefined) {
     
       props.setDiaryEntries(props.storedEntries[arg.dateStr])
-      props.setDiaryDay(props.setDiaryDay[arg.dateStr])
+      //props.setDiaryDay(props.setDiaryDay[arg.dateStr])
       setDiaryDay(arg.dateStr)
+      setCurrentDate(arg.dateStr)
     }
     else {
+      console.log("here")
+      setCurrentDate(arg.dateStr)
       let newDiaryDay = props.diaryDay
       let key
       for(key in props.storedEntries) {
