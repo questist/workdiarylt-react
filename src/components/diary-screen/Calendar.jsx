@@ -26,7 +26,6 @@ export default function Calendar(props) {
       setCurrentDate(arg.dateStr)
     }
     else {
-      console.log("here")
       setCurrentDate(arg.dateStr)
       let newDiaryDay = props.diaryDay
       let key

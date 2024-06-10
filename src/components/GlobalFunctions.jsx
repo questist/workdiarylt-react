@@ -1,5 +1,5 @@
 export default function Globals() {
-    console.log("Work Diary LT, Ver .1 Beta")
+    console.log("Work Diary LT, Ver 1.0 Beta")
 }
 
 let StatusEnum = {
