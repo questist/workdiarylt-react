@@ -380,6 +380,14 @@ function App() {
 
   //Save the current entries
   function onClickSave() {
+    if(runningEntry.isPomodoro) {
+      onClickPomodoro(null)
+    } else {
+      if(isStarted) {
+        setStart(false)
+        stopRunning()
+      }
+    }
     storedEntries[getDate()] = entries
     saveDataToFile()
   }
