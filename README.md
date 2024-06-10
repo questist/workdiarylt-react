@@ -17,6 +17,15 @@
 |             OpenAI Authors            |
 |_______________________________________|
 
+Features
+* Individual time tracking for tasks
+* Editable task information: title, stars, and notes
+* Elapsed time counter
+* Pomodoro feature: set number of pomodoros, duration, short break duration, and long break duration
+* Toggle between time elapsed and time left when using pomodoros
+* Diary Screen with calendar to view past time tracking records
+* Save session data in localStorage
+* Save time tracking to file and load from file
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
