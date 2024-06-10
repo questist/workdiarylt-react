@@ -12,11 +12,13 @@ const Controls = ({
                     onClickHandler={onClickLoad} 
                     style={{marginTop: '10px',marginBottom: '10px',width: '102px',justifyContent: 'center'}}
                 />
+                {/*
                 <Button 
                     text={"TOGGLE"}
                     onClickHandler={onClickToggle}
                     style={{marginTop: '10px',marginBottom: '10px',width: '102px',justifyContent: 'center'}} 
                 />
+                */}
                 </div>
             </div>
             <div>
