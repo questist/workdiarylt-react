@@ -139,23 +139,21 @@ function getTodaysSavedEntries() {
 function getStoredEntries() {
     //addDummyData()
     let localdates = localStorage.getItem("wdlt_dates")
-    //TODO: Use ?true:false here if possible
+    
     let success = false
-    try {
-        /* TODO: May not need this
-        if(localdates == null) {
-            throw new Error("JSON Parse Error - should have returned an array");
-        }*/
-        localdates = JSON.parse(localdates)
-        if(Array.isArray(localdates) === false) {
-            throw new Error("JSON Parse Error - should have returned an array");
+    if(localdates) {
+        try {
+            localdates = JSON.parse(localdates)
+            if(Array.isArray(localdates) === false) {
+                throw new Error("JSON Parse Error - should have returned an array");
+            }
+            success = true
+        } catch(e) {
+            console.log("Utility.jsx; getStoredEntries")
+            console.log("Could not read wdlt_dates: " + e);
+            console.log(e.name + ": " + e.message);
+            return {}
         }
-        success = true
-    } catch(e) {
-        console.log("Utility.jsx; getStoredEntries")
-        console.log("Could not read wdlt_dates: " + e);
-        console.log(e.name + ": " + e.message);
-        return false
     }
     
     if(success === true) {
@@ -180,14 +178,14 @@ function getStoredEntries() {
                 console.log("Could not read wdlt stored date at " + index + " from " + localdates[index]);
                 console.log(e);
                 console.log(e.name + ": " + e.message);
-                return false
+                return {}
             }
         }
         return storedentries
         
     }
 
-    return false
+    return {}
     
 }
 let storedEntries = getStoredEntries()
