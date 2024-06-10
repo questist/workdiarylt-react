@@ -1,3 +1,24 @@
+ _______________________________________
+/                                       \
+|          WORK DIARY LT                |
+|_______________________________________|
+|                                       |
+|   The goal of this app is to allow    |
+|   users to record their times of      |
+|   completing tasks. Then there is     |
+|   a diary screen that loads a         |
+|   calendar of past recorded times     |
+|   it uses local storage to save       |
+|   across reloads in the same browser  |
+|   and includes a load and save to     |
+|   file for persisting past trackers   |
+|_______________________________________|
+|                AUTHOR:                |
+|             OpenAI Authors            |
+|_______________________________________|
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
