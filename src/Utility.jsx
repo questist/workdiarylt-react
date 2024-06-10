@@ -105,6 +105,23 @@ function clearLocalStorage() {
     localStorage.clear();
 }
 
+function getTodaysSavedEntries() {
+    let todaysEntries = localStorage.getItem("wdlt_" + getDate())
+    if(todaysEntries) {
+        todaysEntries = JSON.parse(todaysEntries)
+        if(Array.isArray(todaysEntries) == false) {
+            throw new Error("JSON Parse Error - should have returned an array");
+        }
+        for(let i in todaysEntries) {
+            todaysEntries[i] = Object.assign({},initialEntry, todaysEntries[i])
+            todaysEntries[i].start = new Date(todaysEntries[i].start)
+            todaysEntries[i].end = new Date(todaysEntries[i].end) 
+        }
+        return todaysEntries
+    } else {
+        return [initialEntry]
+    }
+}
 //returns an object with property of an array of entries 
 //{date -> [{entry},...]}
 function getStoredEntries() {
@@ -262,4 +279,4 @@ function formatDataToCSV(data) {
     return csvtowrite
 }
 
-export { getDate, loadDataFromFile, saveDataToFile, getStoredEntries, storedEntries, addDummyData}
+export { getDate, loadDataFromFile, saveDataToFile, getStoredEntries, getTodaysSavedEntries, storedEntries, addDummyData}

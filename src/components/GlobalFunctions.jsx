@@ -72,7 +72,7 @@ var defaultEntry = {
 }
 
 const initialEntry = Object.assign({},defaultEntry)
-const initialDiaryEntry = Object.assign({title: "Please load a file or save todays data"},defaultEntry)
+const initialDiaryEntry = Object.assign({},{title: "Please load a file or save todays data"},defaultEntry)
 /*
 const DataCache = {
     cache:{

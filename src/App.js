@@ -14,7 +14,7 @@ import {StatusEnum, initialDiaryEntry} from './components/GlobalFunctions'
 import Controls from './components/Controls'
 import Calendar from './components/diary-screen/Calendar'
 import Diary from './components/diary-screen/Diary'
-import { getDate, loadDataFromFile,saveDataToFile, storedEntries } from './Utility';
+import { getDate, loadDataFromFile,saveDataToFile, storedEntries, getTodaysSavedEntries } from './Utility';
 import DiaryControls from './components/diary-screen/DiaryControls'
 import { getDateMeta } from '@fullcalendar/react';
 import { initialEntry } from './components/GlobalFunctions';
@@ -23,7 +23,7 @@ function App() {
 
   
   //states
-  const [entries, setEntries] = useState([initialEntry])
+  const [entries, setEntries] = useState(getTodaysSavedEntries())
   const [isStarted,setStart] = useState(false)
   const [runningEntry,setRunningEntry] = useState(entries[0])
   const [startingPomodoro,setStartingPomodoro] = useState(null)
@@ -378,6 +378,7 @@ function App() {
     quickselects = quickselects.filter((value) => value !== undefined)
   }
 
+  //Save the current entries
   function onClickSave() {
     storedEntries[getDate()] = entries
     saveDataToFile()
