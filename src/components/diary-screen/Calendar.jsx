@@ -40,28 +40,10 @@ export default function Calendar(props) {
     }
   }
 
-  /*
-  props.handleLoad = function() {
-    loadDataFromFile()
-    let newDiaryDay = props.diaryDay
-    let key
-    for(key in props.storedEntries) {
-      if(key !== props.diaryDay) {
-        newDiaryDay = key
-      }
-    }
-    props.setDiaryEntries(props.storedEntries[key])
-    props.setDiaryDay(newDiaryDay)
-  }
-  */
+ 
   const [refresh,setRefresh] = useState({})
   const [diaryDay, setDiaryDay] = useState("")
-  function r() {
-    let d = new Date().toString()
-    // re-renders the component
-    setRefresh({d})
-  };
-  
+
     return (
       <FullCalendar
         plugins={[ dayGridPlugin, interactionPlugin ]}
@@ -69,40 +51,4 @@ export default function Calendar(props) {
         events = {ev}
       />
     )
-  
-  
-/*
-  constructor(props) {
-    super()
-    this.ev = []
-    let storedentries = getStoredEntries()
-    for(const prop in storedentries) {
-      this.ev.push( { 
-        title: storedentries[prop].length,
-        date: prop
-      })
-    }
-  }
-*/
 }
-/*
-export default function xo(setCurrentDay) {
-
-  let storedentries = getStoredEntries()
-  let ev = []
-  for(const prop in storedentries) {
-    ev.push( { 
-      title: storedentries[prop].length,
-      date: prop
-    })
-  }
-    return (
-      <div>Calendar</div>
-      
-        <FullCalendar
-          plugins={[ dayGridPlugin ]}
-          initialView="dayGridMonth"
-          events={ev}
-        />
-      )
-}*/

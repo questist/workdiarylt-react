@@ -10,7 +10,7 @@ let StatusEnum = {
     APPSTARTED: 5,
 }
 
-var initialEntry = {
+var defaultEntry = {
   index: 0,
   title: "Logging my activities",
   id: "0_welcome",
@@ -71,6 +71,8 @@ var initialEntry = {
   },
 }
 
+const initialEntry = Object.assign({},defaultEntry)
+const initialDiaryEntry = Object.assign({title: "Please load a file or save todays data"},defaultEntry)
 /*
 const DataCache = {
     cache:{
@@ -80,4 +82,4 @@ const DataCache = {
   
   const Context = createContext(DataCache.cache)
 */
-export {StatusEnum,initialEntry}
+export {StatusEnum,initialEntry,initialDiaryEntry}

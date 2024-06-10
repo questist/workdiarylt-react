@@ -110,7 +110,7 @@ function clearLocalStorage() {
 //returns an object with property of an array of entries 
 //{date -> [{entry},...]}
 function getStoredEntries() {
-    addDummyData()
+    //addDummyData()
     let localdates = localStorage.getItem("wdlt_dates")
     //TODO: Use ?true:false here if possible
     let success = false

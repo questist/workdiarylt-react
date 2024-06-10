@@ -10,7 +10,7 @@ import ltlogo from './assets/images/logo.png'
 import workimgselected from './assets/images/menu-work-selected.png'
 import diaryimgunselected from './assets/images/menu-diary-unselected.png'
 import alarm from './assets/audio/alarm.mp3'
-import {StatusEnum} from './components/GlobalFunctions'
+import {StatusEnum, initialDiaryEntry} from './components/GlobalFunctions'
 import Controls from './components/Controls'
 import Calendar from './components/diary-screen/Calendar'
 import Diary from './components/diary-screen/Diary'
@@ -449,7 +449,7 @@ function App() {
   
 
   
-  const [diaryEntries,setDiaryEntries] = useState(storedEntries["2022-10-03"])
+  const [diaryEntries,setDiaryEntries] = useState([initialDiaryEntry])
   const [diaryDay,setDiaryDay] = useState("2022-10-03")
   
   function onClickToggle() {
