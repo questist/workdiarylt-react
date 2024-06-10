@@ -1,9 +1,7 @@
 import React from 'react'
-import {useState} from 'react'
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from '@fullcalendar/interaction'
-import {getStoredEntries, loadDataFromFile} from '../../Utility'
 
 export default function Calendar(props) {
   let ev = []
@@ -39,9 +37,6 @@ export default function Calendar(props) {
     }
   }
 
- 
-  const [refresh,setRefresh] = useState({})
-  const [diaryDay, setDiaryDay] = useState("")
 
     return (
       <FullCalendar

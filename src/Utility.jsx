@@ -32,7 +32,7 @@ function addDummyData() {
                 id: "_welcome",
                 start: new Date(),
                 end: null,
-                notes: "Happy Happy " +  "(" + index + ")" + setdates[index] + " Enjoy Enjoy",
+                notes: "Hello, World", //"Happy Happy " +  "(" + index + ")" + setdates[index] + " Enjoy Enjoy",
                 rating: 0,
                 isPomodoro: false,
                 duration: 0,
@@ -75,7 +75,7 @@ function saveTodaysEntries(entries) {
     } else {
         try {
             localdates = JSON.parse(localdates);
-            if(Array.isArray(localdates) == false) {
+            if(Array.isArray(localdates) === false) {
                 throw new Error("JSON Parse Error - should have returned an array");
             }
             success = true;
@@ -91,7 +91,7 @@ function saveTodaysEntries(entries) {
     }    
     
 
-    if(typeof(Storage) !== undefined && success == true) {
+    if(typeof(Storage) !== undefined && success === true) {
       localStorage.setItem("wdlt_" + getDate(),JSON.stringify(entries));
       localStorage.setItem("wdlt_dates",localdates)
     }
@@ -109,7 +109,7 @@ function getTodaysSavedEntries() {
     let todaysEntries = localStorage.getItem("wdlt_" + getDate())
     if(todaysEntries) {
         todaysEntries = JSON.parse(todaysEntries)
-        if(Array.isArray(todaysEntries) == false) {
+        if(Array.isArray(todaysEntries) === false) {
             throw new Error("JSON Parse Error - should have returned an array");
         }
         for(let i in todaysEntries) {
@@ -135,7 +135,7 @@ function getStoredEntries() {
             throw new Error("JSON Parse Error - should have returned an array");
         }*/
         localdates = JSON.parse(localdates)
-        if(Array.isArray(localdates) == false) {
+        if(Array.isArray(localdates) === false) {
             throw new Error("JSON Parse Error - should have returned an array");
         }
         success = true
@@ -146,7 +146,7 @@ function getStoredEntries() {
         return false
     }
     
-    if(success == true) {
+    if(success === true) {
 
         success = false
         let storedentries = {}
@@ -205,7 +205,6 @@ async function saveDataToFile() {
     [fileStream3] = await window.showOpenFilePicker();
   }
   const file = await fileStream3.getFile();
-  const content = await file.text();
 
   const writable = await fileStream3.createWritable();
 
@@ -216,7 +215,6 @@ async function saveDataToFile() {
   await writable.close();
 }
 
-let fileStream = null
 async function loadDataFromFile() {
   
       // Destructure the one-element array.
@@ -260,8 +258,7 @@ async function loadDataFromFile() {
 function formatDataToCSV(data) {
     let csvtowrite = []
     for(const item in data) {
-        //let currentDate = data[item]
-        let tmp1 = {}
+
         for(const field in data[item]) {
             let tmp2 = Object.assign({},{date: item},data[item][field])
             csvtowrite.push(tmp2)
@@ -279,4 +276,4 @@ function formatDataToCSV(data) {
     return csvtowrite
 }
 
-export { getDate, loadDataFromFile, saveDataToFile, getStoredEntries, getTodaysSavedEntries, storedEntries, addDummyData}
+export { getDate, loadDataFromFile, saveDataToFile, getStoredEntries, getTodaysSavedEntries, saveTodaysEntries, storedEntries, addDummyData}

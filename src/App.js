@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import { BrowserRouter as Router, Switch, Route, Link, useLocation} from "react-router-dom"
+import { Switch, Route, Link, useLocation} from "react-router-dom"
 import './App.css';
 import QuickSelect from './components/QuickSelect'
 import DiaryEntries from './components/DiaryEntries'
@@ -12,7 +12,7 @@ import alarm from './assets/audio/alarm.mp3'
 import {StatusEnum, initialDiaryEntry} from './components/GlobalFunctions'
 import Controls from './components/Controls'
 import Calendar from './components/diary-screen/Calendar'
-import { getDate, loadDataFromFile,saveDataToFile, storedEntries, getTodaysSavedEntries } from './Utility';
+import { getDate, loadDataFromFile,saveDataToFile, storedEntries, getTodaysSavedEntries, saveTodaysEntries } from './Utility';
 import DiaryControls from './components/diary-screen/DiaryControls'
 import { initialEntry } from './components/GlobalFunctions';
 
@@ -414,9 +414,13 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-   
+    console.log(location.pathname)
     if (location.pathname === '/') {
       setEntries(getTodaysSavedEntries())
+    }
+    if(location.pathname === '/diary') {
+      console.log("here")
+      //onClickSave()
     }
   }, [location.pathname]); 
   return (
