@@ -27,6 +27,16 @@ Features
 * Save session data in localStorage
 * Save time tracking to file and load from file
 
+Installation
+Clone the project
+npm install
+npm start
+- ready, set, track
+
+![App Work Screen](/src/assets/images/workscreen.jpg)
+
+![App Diary Screen](/src/assets/images/diaryscreen.jpg)
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
