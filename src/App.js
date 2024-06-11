@@ -7,6 +7,8 @@ import PomodoroDialog from './components/PomodoroDialog'
 import './assets/scss/app.css'
 import ltlogo from './assets/images/logo.png'
 import workimgselected from './assets/images/menu-work-selected.png'
+import workimgunselected from './assets/images/menu-work-unselected.png'
+import diaryimgselected from './assets/images/menu-diary-selected.png'
 import diaryimgunselected from './assets/images/menu-diary-unselected.png'
 import alarm from './assets/audio/alarm.mp3'
 import {StatusEnum, initialDiaryEntry} from './components/GlobalFunctions'
@@ -412,15 +414,19 @@ function App() {
   }
 
   const location = useLocation();
-
+  const [workimg, setWorkImg] = useState(workimgselected)
+  const [diaryimg, setDiaryImg] = useState(diaryimgunselected)
+  
   useEffect(() => {
-    console.log(location.pathname)
     if (location.pathname === '/') {
       setEntries(getTodaysSavedEntries())
+      setWorkImg(workimgselected)
+      setDiaryImg(diaryimgunselected)
     }
     if(location.pathname === '/diary') {
-      console.log("here")
       saveTodaysEntries(entries)
+      setWorkImg(workimgunselected)
+      setDiaryImg(diaryimgselected)
     }
   }, [location.pathname]); 
   return (
@@ -429,8 +435,8 @@ function App() {
       <div className="header" style={{textAlign: 'initial'}}>
         <img src={ltlogo} />
         <div className="nav">
-          <Link to="/"><img src={workimgselected} /></Link>
-          <Link to="/diary"><img src={diaryimgunselected} /></Link>
+          <Link to="/"><img src={workimg} /></Link>
+          <Link to="/diary"><img src={diaryimg} /></Link>
         </div>
       </div>
     
