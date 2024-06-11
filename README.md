@@ -1,21 +1,7 @@
- _______________________________________
-/                                       \
-|          WORK DIARY LT                |
-|_______________________________________|
-|                                       |
-|   The goal of this app is to allow    |
-|   users to record their times of      |
-|   completing tasks. Then there is     |
-|   a diary screen that loads a         |
-|   calendar of past recorded times     |
-|   it uses local storage to save       |
-|   across reloads in the same browser  |
-|   and includes a load and save to     |
-|   file for persisting past trackers   |
-|_______________________________________|
-|                AUTHOR:                |
-|             OpenAI Authors            |
-|_______________________________________|
+
+ WORK DIARY LT
+
+The goal of this app is to allow users to record their times of completing tasks. Then there is a diary screen that loads a calendar of past recorded times, it uses local storage to save across browser session in the and includes a load and save to file for persisting past trackers
 
 Features
 * Individual time tracking for tasks
@@ -29,8 +15,11 @@ Features
 
 Installation
 Clone the project
+
 npm install
+
 npm start
+
 - ready, set, track
 
 ![App Work Screen](/src/assets/images/workscreen.jpg)
