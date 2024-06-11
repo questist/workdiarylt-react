@@ -1,6 +1,5 @@
-import React, { useState} from 'react';
-import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom"
-import logo from './logo.svg';
+import React, { useState, useEffect} from 'react';
+import { Switch, Route, Link, useLocation} from "react-router-dom"
 import './App.css';
 import QuickSelect from './components/QuickSelect'
 import DiaryEntries from './components/DiaryEntries'
@@ -8,92 +7,33 @@ import PomodoroDialog from './components/PomodoroDialog'
 import './assets/scss/app.css'
 import ltlogo from './assets/images/logo.png'
 import workimgselected from './assets/images/menu-work-selected.png'
+import workimgunselected from './assets/images/menu-work-unselected.png'
+import diaryimgselected from './assets/images/menu-diary-selected.png'
 import diaryimgunselected from './assets/images/menu-diary-unselected.png'
 import alarm from './assets/audio/alarm.mp3'
-import {StatusEnum} from './components/GlobalFunctions'
+import {StatusEnum, initialDiaryEntry} from './components/GlobalFunctions'
 import Controls from './components/Controls'
-import Diary from './components/diary-screen/Diary'
-
+import Calendar from './components/diary-screen/Calendar'
+import { getDate, loadDataFromFile,saveDataToFile, storedEntries, getTodaysSavedEntries, saveTodaysEntries } from './Utility';
+import DiaryControls from './components/diary-screen/DiaryControls'
+import { initialEntry } from './components/GlobalFunctions';
 
 function App() {
 
   
-
-  /* initialEntry for the data cache for the context */
-  var initialEntry = {
-    index: 0,
-    title: "Logging my activities",
-    id: "0_welcome",
-    start: new Date(),
-    end: null,
-    notes: "",
-    rating: 0,
-    isPomodoro: false,
-    status: StatusEnum.APPSTARTED,
-    duration: 0,
-    
-    /* computed functions */
-    className() {
-      if(this.isPomodoro && this.status === StatusEnum.NOTSTARTED) {
-          return "entry-pomodoro"
-      }
-      else if(this.status === StatusEnum.RUNNING) {
-          return "entry-selected"
-      }
-      else {
-          return "entry-unselected"
-      }
-    },
-    listingTitle() {
-      //status of a Pomodor is the only one that starts at NOTSTARTED
-      //entry.start is the only text value for pomodoro not start.date() class like when once it is started
-      if(this.status === StatusEnum.NOTSTARTED) {
-          return this.start
-      }
-      //status once the entrylisting has been started once
-      else if(this.status === StatusEnum.RUNNING 
-              || this.status === StatusEnum.COMPLETED
-              || this.status === StatusEnum.PAUSED) {
-          return this.start.toLocaleTimeString() + " : " + this.title
-      }
-      //initial status for the app once it is opened, only one entry that hasn't been started
-      else if(this.status === StatusEnum.APPSTARTED) {
-          //let title = (entry.title === "Logging my activities")?"Welcome, Start your Work Diary Today":entry.title;
-          return this.start.toLocaleTimeString() + " : Welcome, Start your Work Diary Today"
-      }
-      else {
-          throw new Error("EntryListing.setTitleText: Status should not found")
-      }
-    },
-    dialogTitle() {
-      let titleLine = ""
-      let minutes = Math.ceil(this.duration / 1000 / 60)
-      if(!this.isPomodoro || this.status === StatusEnum.COMPLETED) {
-              let forString = (this.status === StatusEnum.COMPLETED)?(" for " + minutes + " minutes"):""
-              titleLine = "I felt like " + this.title + 
-                      " at " + this.start.toLocaleTimeString() + forString
-      }
-      else {
-          
-          titleLine = "I will be " + this.title + " for " + minutes + " minutes"
-      }
-      return titleLine
-    },
-  }
-
-  
   //states
-  const [entries, setEntries] = useState([initialEntry])
+  const [entries, setEntries] = useState(getTodaysSavedEntries())
   const [isStarted,setStart] = useState(false)
   const [runningEntry,setRunningEntry] = useState(entries[0])
   const [startingPomodoro,setStartingPomodoro] = useState(null)
   const [editPomodoro,setEditPomodoro] = useState(false)
  
 
+  
   const addEntry = (entry) => {
     const newobj = Object.assign({}, initialEntry, entry);
     entries.unshift(newobj)
-    //console.log("length: " + entries.length)
+
     setEntries(entries)
   };
   
@@ -353,7 +293,6 @@ function App() {
           let now = new Date()
           
           starting.duration = now.getTime() - starting.end.getTime() + starting.duration
-          console.log(starting.duration)
         }
         else iteratePomodoro(startingPomodoro)
       }
@@ -437,25 +376,79 @@ function App() {
     })
     quickselects = quickselects.filter((value) => value !== undefined)
   }
+
+  //Save the current entries
+  function onClickSave() {
+    if(runningEntry.isPomodoro) {
+      onClickPomodoro(null)
+    } else {
+      if(isStarted) {
+        setStart(false)
+        stopRunning()
+      }
+    }
+    storedEntries[getDate()] = entries
+    saveDataToFile()
+  }
+  /****************** Diary Screen Function *******************/
+  
+
+  
+  const [diaryEntries,setDiaryEntries] = useState([initialDiaryEntry])
+  //const [diaryDay,setDiaryDay] = useState("2022-10-03")
+  
+  function onClickToggle() {
+    alert("Toggle clicked")
+  }
+
+
+  async function onClickLoad() {
+    
+    await loadDataFromFile()
+
+
+    const keys = Object.keys(storedEntries)
+    const day = keys[keys.length-1]
+    setDiaryEntries(storedEntries[day])
+    //setDiaryDay(day)
+  }
+
+  const location = useLocation();
+  const [workimg, setWorkImg] = useState(workimgselected)
+  const [diaryimg, setDiaryImg] = useState(diaryimgunselected)
+  
+  useEffect(() => {
+    if (location.pathname === '/') {
+      setEntries(getTodaysSavedEntries())
+      setWorkImg(workimgselected)
+      setDiaryImg(diaryimgunselected)
+    }
+    if(location.pathname === '/diary') {
+      saveTodaysEntries(entries)
+      setWorkImg(workimgunselected)
+      setDiaryImg(diaryimgselected)
+    }
+  }, [location.pathname]); 
   return (
-    <Router>
     <div className="App">
     
       <div className="header" style={{textAlign: 'initial'}}>
         <img src={ltlogo} />
         <div className="nav">
-          <Link to="/"><img src={workimgselected} /></Link>
-          <Link to="/diary"><img src={diaryimgunselected} /></Link>
+          <Link to="/"><img src={workimg} /></Link>
+          <Link to="/diary"><img src={diaryimg} /></Link>
         </div>
       </div>
     
     <Switch>
       <Route exact path="/">
+
         <Controls
           entriesLength={entries.length}
           selectedEntry={runningEntry}
           onClickPomodoro={onClickPomodoro}
           onClickStart={onClickStart}
+          onClickSave={onClickSave}
           isStarted={isStarted}
           checkEntry={checkEntry}
         />
@@ -470,13 +463,27 @@ function App() {
         </div>
         </Route>
         <Route path="/diary">
-          <Diary />
+        <div>
+          <DiaryControls 
+            entriesLength={diaryEntries?.length}
+            onClickToggle={onClickToggle}
+            onClickLoad={onClickLoad}
+          />
+            <div className="today-select">
+            <div className="quick-selects-section">
+                <Calendar
+                    handleLoad={onClickLoad} storedEntries = {storedEntries}  setDiaryEntries = {setDiaryEntries}
+                />
+            
+            </div>
+            <DiaryEntries entries={diaryEntries}/>
+            </div>
+        </div>
         </Route>
     </Switch>
   
     </div>
-    </Router>
-  );
+  )
 }
 
 export default App;

@@ -1,3 +1,43 @@
+ _______________________________________
+/                                       \
+|          WORK DIARY LT                |
+|_______________________________________|
+|                                       |
+|   The goal of this app is to allow    |
+|   users to record their times of      |
+|   completing tasks. Then there is     |
+|   a diary screen that loads a         |
+|   calendar of past recorded times     |
+|   it uses local storage to save       |
+|   across reloads in the same browser  |
+|   and includes a load and save to     |
+|   file for persisting past trackers   |
+|_______________________________________|
+|                AUTHOR:                |
+|             OpenAI Authors            |
+|_______________________________________|
+
+Features
+* Individual time tracking for tasks
+* Editable task information: title, stars, and notes
+* Elapsed time counter
+* Pomodoro feature: set number of pomodoros, duration, short break duration, and long break duration
+* Toggle between time elapsed and time left when using pomodoros
+* Diary Screen with calendar to view past time tracking records
+* Save session data in localStorage
+* Save time tracking to file and load from file
+
+Installation
+Clone the project
+npm install
+npm start
+- ready, set, track
+
+![App Work Screen](/src/assets/images/workscreen.jpg)
+
+![App Diary Screen](/src/assets/images/diaryscreen.jpg)
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -66,3 +106,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+To get to run on my new desktop I had to replace these codes
+"scripts": {
+    "start": "react-scripts start",

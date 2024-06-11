@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React from 'react'
 import '../assets/scss/EntryListing.css'
 import '../assets/scss/EntryDialog.css'
 import EntryDialog from '../components/EntryDialog'

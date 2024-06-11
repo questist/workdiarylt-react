@@ -2,6 +2,7 @@
 .button {
   background-color: #595daf;
   height: 36px;
+  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   padding: 0 14px 0 14px;

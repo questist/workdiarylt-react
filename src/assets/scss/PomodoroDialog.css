@@ -6,6 +6,7 @@
   display: inline-block;
   left: 0;*/
   position: relative;
+  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   text-align: left;

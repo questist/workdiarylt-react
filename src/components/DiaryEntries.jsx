@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import EntryListing from './EntryListing'
 import '../assets/scss/DiaryEntries.css'
-
+import { saveDataToFile } from '../Utility'
 
 export default function DiaryEntries({entries}) {
     const initialOptions = {
@@ -28,6 +28,7 @@ export default function DiaryEntries({entries}) {
     function onClickSave(e) {
         dialogOptions.clicked()
         setDialog({...dialogOptions})
+       //TODO: saveDataToFile() and save and load file across the app
     }
     /*
     function onClickEntry(event,clickedEntry) 
